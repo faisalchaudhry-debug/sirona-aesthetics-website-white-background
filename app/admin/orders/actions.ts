@@ -2,14 +2,13 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 export async function updateOrderStatus(formData: FormData) {
     const supabase = await createClient()
 
     // Verify admin
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
+    if (!user) return { error: 'Unauthorized' }
 
     const { data: adminProfile } = await supabase
         .from('profiles')
@@ -18,7 +17,7 @@ export async function updateOrderStatus(formData: FormData) {
         .single()
 
     if (!adminProfile || adminProfile.role !== 'admin') {
-        redirect('/admin?error=unauthorized')
+        return { error: 'Unauthorized' }
     }
 
     const orderId = formData.get('orderId') as string
@@ -30,9 +29,9 @@ export async function updateOrderStatus(formData: FormData) {
         .eq('id', orderId)
 
     if (error) {
-        console.error('Order update error:', error)
+        return { error: error.message }
     }
 
     revalidatePath('/admin/orders')
-    redirect('/admin/orders')
+    return { success: true }
 }

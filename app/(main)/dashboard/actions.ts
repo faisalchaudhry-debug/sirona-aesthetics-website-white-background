@@ -8,7 +8,7 @@ export async function updateProfile(formData: FormData) {
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
+    if (!user) return { error: 'Unauthorized' }
 
     const fullName = formData.get('fullName') as string
     const companyName = formData.get('companyName') as string
@@ -24,10 +24,9 @@ export async function updateProfile(formData: FormData) {
         .eq('id', user.id)
 
     if (error) {
-        console.error('Profile update error:', error)
-        redirect('/dashboard/edit?error=update-failed')
+        return { error: error.message }
     }
 
     revalidatePath('/dashboard')
-    redirect('/dashboard')
+    return redirect('/dashboard')
 }

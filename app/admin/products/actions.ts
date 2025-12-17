@@ -101,7 +101,7 @@ async function handleMediaUploads(productId: string, formData: FormData) {
 export async function createProduct(formData: FormData) {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
+    if (!user) return { error: 'Unauthorized' }
 
     const productData = {
         name: formData.get('name') as string,
@@ -121,10 +121,7 @@ export async function createProduct(formData: FormData) {
         .select()
         .single()
 
-    if (error) {
-        console.error('Product creation error:', error)
-        redirect('/admin/products/new?error=create-failed')
-    }
+    if (error) return { error: error.message }
 
     await handleMediaUploads(product.id, formData)
 
@@ -152,10 +149,7 @@ export async function updateProduct(formData: FormData) {
         .update(productData)
         .eq('id', productId)
 
-    if (error) {
-        console.error('Product update error:', error)
-        redirect(`/admin/products/${productId}?error=update-failed`)
-    }
+    if (error) return { error: error.message }
 
     await handleMediaUploads(productId, formData)
 

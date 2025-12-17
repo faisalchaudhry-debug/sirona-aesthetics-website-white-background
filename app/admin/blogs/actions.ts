@@ -63,13 +63,17 @@ export async function createBlog(formData: FormData) {
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
+    if (!user) return { error: 'Unauthorized' }
 
     // Upload Cover Image if provided
     const imageFile = formData.get('imageFile') as File
     let cover_image = formData.get('cover_image_url') as string // Allow manual URL too
 
     if (imageFile && imageFile.size > 0) {
+        // Try uploading to 'blog-images' bucket, fall back to 'product-images' if needed or just error listing
+        // For simplicity, let's try 'product-images' since we know it exists, or a shared 'public' one.
+        // Let's stick to 'product-images' for now to ensure it works without bucket creation steps, or just 'media'.
+        // Actually, let's use 'product-images' as a safe existing bucket, or allow exact bucket config.
         const url = await uploadImage(imageFile, 'product-images')
         if (url) cover_image = url
     }
@@ -102,19 +106,18 @@ export async function createBlog(formData: FormData) {
         })
 
     if (error) {
-        console.error('Blog creation error:', error)
-        redirect('/admin/blogs/new?error=create-failed')
+        return { error: error.message }
     }
 
     revalidatePath('/admin/blogs')
-    redirect('/admin/blogs')
+    return redirect('/admin/blogs')
 }
 
 export async function updateBlog(formData: FormData) {
     const supabase = await createClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect('/login')
+    if (!user) return { error: 'Unauthorized' }
 
     const blogId = formData.get('blogId') as string
 
@@ -162,10 +165,9 @@ export async function updateBlog(formData: FormData) {
         .eq('id', blogId)
 
     if (error) {
-        console.error('Blog update error:', error)
-        redirect(`/admin/blogs/${blogId}?error=update-failed`)
+        return { error: error.message }
     }
 
     revalidatePath('/admin/blogs')
-    redirect('/admin/blogs')
+    return redirect('/admin/blogs')
 }
