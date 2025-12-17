@@ -77,7 +77,10 @@ export default async function AdminOrdersPage() {
                                     </td>
                                     <td className="px-6 py-4 text-gray-600 text-sm">{new Date(order.created_at).toLocaleDateString()}</td>
                                     <td className="px-6 py-4 text-right">
-                                        <form action={updateOrderStatus} className="inline-flex items-center">
+                                        <form action={async (formData) => {
+                                            'use server'
+                                            await updateOrderStatus(formData)
+                                        }} className="inline-flex items-center">
                                             <input type="hidden" name="orderId" value={order.id} />
                                             <div className="relative">
                                                 <select

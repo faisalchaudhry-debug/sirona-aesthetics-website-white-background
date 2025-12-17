@@ -12,7 +12,10 @@ export default function NewBlogPage() {
                 <h1 className="text-2xl font-bold text-gray-800">New Article</h1>
             </div>
 
-            <form action={createBlog} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+            <form action={async (formData) => {
+                'use server'
+                await createBlog(formData)
+            }} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
 
                 {/* Main Info */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
