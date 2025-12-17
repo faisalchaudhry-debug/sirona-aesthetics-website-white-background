@@ -82,7 +82,7 @@ export default function UKRPPage() {
                                     <div>
                                         <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">Compliance Status</p>
                                         <p className="text-2xl font-bold text-[#4ade80] flex items-center">
-                                            Active & Monitored <div className="w-2 h-2 rounded-full bg-[#4ade80] ml-3 animate-pulse"></div>
+                                            Active & Monitored <span className="w-2 h-2 rounded-full bg-[#4ade80] ml-3 animate-pulse"></span>
                                         </p>
                                     </div>
                                     <Shield className="w-12 h-12 text-[#38bdf8] opacity-50" />

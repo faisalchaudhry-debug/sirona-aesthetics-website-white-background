@@ -13,8 +13,10 @@ export async function updateProfile(formData: FormData) {
     const fullName = formData.get('fullName') as string
     const companyName = formData.get('companyName') as string
     const phone = formData.get('phone') as string
+    const email = formData.get('email') as string
 
-    const { error } = await supabase
+    // 1. Update Profile Data
+    const { error: profileError } = await supabase
         .from('profiles')
         .update({
             full_name: fullName,
@@ -23,9 +25,23 @@ export async function updateProfile(formData: FormData) {
         })
         .eq('id', user.id)
 
-    if (error) {
-        return { error: error.message }
+    if (profileError) {
+        return { error: profileError.message }
     }
+
+    // 2. Handle Email Change if different
+    if (email && email !== user.email) {
+        const { error: authError } = await supabase.auth.updateUser({ email: email })
+
+        if (authError) {
+            return { error: 'Profile updated, but email update failed: ' + authError.message }
+        }
+
+        // If email update initiated successfully
+        return redirect('/dashboard?message=Profile updated. Please check your email inbox to confirm your new email address.')
+    }
+
+
 
     revalidatePath('/dashboard')
     return redirect('/dashboard')

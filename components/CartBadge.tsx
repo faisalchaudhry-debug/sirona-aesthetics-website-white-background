@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { ShoppingCart } from 'lucide-react'
 
 export default function CartBadge() {
+    console.log('CartBadge rendering')
     const { cartCount } = useCart()
 
     return (

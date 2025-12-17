@@ -20,8 +20,26 @@ export async function approveUser(userId: string) {
         return { error: 'Unauthorized' }
     }
 
+    // Initialize Admin Client with Service Role Key
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+        return { error: 'Server configuration error: Missing Service Role Key' }
+    }
+
+    const { createClient: createAdminClient } = await import('@supabase/supabase-js')
+    const supabaseAdmin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        serviceRoleKey,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    )
+
     // Update user
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
         .from('profiles')
         .update({ is_approved: true, role: 'doctor' })
         .eq('id', userId)
@@ -30,7 +48,57 @@ export async function approveUser(userId: string) {
         return { error: error.message }
     }
 
-    revalidatePath('/admin')
+    revalidatePath('/admin/users')
+    return { success: true }
+}
+
+export async function deleteUser(userId: string) {
+    const supabase = await createClient()
+
+    // Verify admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    const { data: adminProfile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+    if (!adminProfile || adminProfile.role !== 'admin') {
+        return { error: 'Unauthorized' }
+    }
+
+    // Initialize Admin Client with Service Role Key
+    // Note: This requires SUPABASE_SERVICE_ROLE_KEY in .env.local
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+        console.error('Missing SUPABASE_SERVICE_ROLE_KEY')
+        return { error: 'Server configuration error: Missing Service Role Key' }
+    }
+
+    const { createClient: createAdminClient } = await import('@supabase/supabase-js')
+    const supabaseAdmin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        serviceRoleKey,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    )
+
+    // Delete user from Supabase Auth (admin only feature)
+    // Deleting from auth.users cascades to profiles automatically
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
+
+    if (error) {
+        console.error('Failed to delete auth user:', error)
+        return { error: error.message }
+    }
+
+    revalidatePath('/admin/users')
     return { success: true }
 }
 
@@ -58,14 +126,45 @@ export async function updateUser(formData: FormData) {
     const role = formData.get('role') as string
     const isApproved = formData.get('isApproved') === 'on'
 
-    const { error } = await supabase
+    const address_line1 = formData.get('address_line1') as string
+    const address_line2 = formData.get('address_line2') as string
+    const city = formData.get('city') as string
+    const state = formData.get('state') as string
+    const postal_code = formData.get('postal_code') as string
+    const country = formData.get('country') as string
+
+    // Initialize Admin Client with Service Role Key
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+        return { error: 'Server configuration error: Missing Service Role Key' }
+    }
+
+    const { createClient: createAdminClient } = await import('@supabase/supabase-js')
+    const supabaseAdmin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        serviceRoleKey,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    )
+
+    const { error } = await supabaseAdmin
         .from('profiles')
         .update({
             full_name: fullName,
             company_name: companyName,
             phone: phone,
             role: role,
-            is_approved: isApproved
+            is_approved: isApproved,
+            address_line1,
+            address_line2,
+            city,
+            state,
+            postal_code,
+            country
         })
         .eq('id', userId)
 
@@ -77,4 +176,3 @@ export async function updateUser(formData: FormData) {
     revalidatePath(`/admin/users/${userId}`)
     return { success: true }
 }
-

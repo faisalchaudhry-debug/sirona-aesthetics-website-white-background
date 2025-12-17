@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { updateUser } from '../../actions'
 import { ArrowLeft, Save } from 'lucide-react'
+import DeleteUserButton from '../DeleteUserButton'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
@@ -56,7 +57,7 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                 name="fullName"
                                 id="fullName"
                                 defaultValue={userProfile.full_name}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
                             />
                         </div>
 
@@ -68,7 +69,7 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                     name="companyName"
                                     id="companyName"
                                     defaultValue={userProfile.company_name || ''}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
                                 />
                             </div>
                             <div>
@@ -78,8 +79,78 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                     name="phone"
                                     id="phone"
                                     defaultValue={userProfile.phone || ''}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
                                 />
+                            </div>
+                        </div>
+
+                        <div className="border-t border-gray-100 pt-6">
+                            <h3 className="text-sm font-medium text-gray-900 mb-4">Shipping Address</h3>
+                            <div className="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label htmlFor="address_line1" className="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
+                                    <input
+                                        type="text"
+                                        name="address_line1"
+                                        id="address_line1"
+                                        defaultValue={userProfile.address_line1 || ''}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="address_line2" className="block text-sm font-medium text-gray-700 mb-1">Address Line 2</label>
+                                    <input
+                                        type="text"
+                                        name="address_line2"
+                                        id="address_line2"
+                                        defaultValue={userProfile.address_line2 || ''}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                        <input
+                                            type="text"
+                                            name="city"
+                                            id="city"
+                                            defaultValue={userProfile.city || ''}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                        <input
+                                            type="text"
+                                            name="state"
+                                            id="state"
+                                            defaultValue={userProfile.state || ''}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label htmlFor="postal_code" className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                                        <input
+                                            type="text"
+                                            name="postal_code"
+                                            id="postal_code"
+                                            defaultValue={userProfile.postal_code || ''}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                                        <input
+                                            type="text"
+                                            name="country"
+                                            id="country"
+                                            defaultValue={userProfile.country || ''}
+                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -90,11 +161,11 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                     name="role"
                                     id="role"
                                     defaultValue={userProfile.role}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-white"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all bg-white text-gray-900"
                                 >
-                                    <option value="user">User</option>
-                                    <option value="doctor">Doctor</option>
-                                    <option value="admin">Admin</option>
+                                    <option value="user" className="text-gray-900">User</option>
+                                    <option value="doctor" className="text-gray-900">Doctor</option>
+                                    <option value="admin" className="text-gray-900">Admin</option>
                                 </select>
                             </div>
 
@@ -114,17 +185,21 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                         </div>
                     </div>
 
-                    <div className="pt-6 border-t border-gray-100 flex justify-end space-x-3">
-                        <Link href="/admin/users" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">
-                            Cancel
-                        </Link>
-                        <button
-                            type="submit"
-                            className="bg-primary text-white px-6 py-2 rounded-lg font-medium flex items-center hover:bg-blue-900 transition-colors shadow-sm"
-                        >
-                            <Save className="w-4 h-4 mr-2" />
-                            Save Changes
-                        </button>
+                    <div className="pt-6 border-t border-gray-100 flex justify-between items-center">
+                        <DeleteUserButton userId={userProfile.id} redirectTo="/admin/users" />
+
+                        <div className="flex space-x-3">
+                            <Link href="/admin/users" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">
+                                Cancel
+                            </Link>
+                            <button
+                                type="submit"
+                                className="bg-primary text-white px-6 py-2 rounded-lg font-medium flex items-center hover:bg-blue-900 transition-colors shadow-sm"
+                            >
+                                <Save className="w-4 h-4 mr-2" />
+                                Save Changes
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>

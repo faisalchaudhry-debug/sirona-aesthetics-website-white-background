@@ -1,5 +1,6 @@
 import { Microscope, Hand, Award, Mail, ChevronRight, Calendar, User, Building, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
+import WebinarForm from './WebinarForm'
 
 export default function TrainingPage() {
     return (
@@ -121,76 +122,7 @@ export default function TrainingPage() {
                                 Join the <span className="text-[#d946ef]">Waitlist</span>
                             </h2>
 
-                            <form className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-                                <div className="space-y-6">
-                                    <div>
-                                        <label htmlFor="name" className="block text-sm font-bold text-gray-300 mb-2">Your Name</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <User className="h-5 w-5 text-gray-500" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                id="name"
-                                                className="w-full bg-[#0B1121] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#d946ef] focus:ring-1 focus:ring-[#d946ef] transition-all"
-                                                placeholder="Enter your full name"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="email" className="block text-sm font-bold text-gray-300 mb-2">Email Address</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <Mail className="h-5 w-5 text-gray-500" />
-                                            </div>
-                                            <input
-                                                type="email"
-                                                id="email"
-                                                className="w-full bg-[#0B1121] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#d946ef] focus:ring-1 focus:ring-[#d946ef] transition-all"
-                                                placeholder="name@example.com"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="clinic" className="block text-sm font-bold text-gray-300 mb-2">Clinic / Practice</label>
-                                        <div className="relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <Building className="h-5 w-5 text-gray-500" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                id="clinic"
-                                                className="w-full bg-[#0B1121] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#d946ef] focus:ring-1 focus:ring-[#d946ef] transition-all"
-                                                placeholder="e.g. Skin Health Clinic"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="message" className="block text-sm font-bold text-gray-300 mb-2">Message (Optional)</label>
-                                        <div className="relative">
-                                            <div className="absolute top-3 left-3 pointer-events-none">
-                                                <MessageSquare className="h-5 w-5 text-gray-500" />
-                                            </div>
-                                            <textarea
-                                                id="message"
-                                                rows={4}
-                                                className="w-full bg-[#0B1121] border border-white/10 rounded-lg py-3 pl-10 pr-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#d946ef] focus:ring-1 focus:ring-[#d946ef] transition-all"
-                                                placeholder="e.g. I'm interested in future workshops"
-                                            ></textarea>
-                                        </div>
-                                    </div>
-
-                                    <button
-                                        type="button" // Changed to button to prevent submission for now
-                                        className="w-full bg-[#d946ef] hover:bg-[#c026d3] text-white font-bold py-4 rounded-lg shadow-lg shadow-[#d946ef]/20 transition-all flex items-center justify-center"
-                                    >
-                                        Register Interest <ChevronRight className="w-5 h-5 ml-2" />
-                                    </button>
-                                </div>
-                            </form>
+                            <WebinarForm />
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
-import { approveUser } from '../actions'
+import { approveUser, deleteUser } from '../actions'
 import { Check, Shield, User as UserIcon, Stethoscope } from 'lucide-react'
+import DeleteUserButton from './DeleteUserButton'
 
 export const revalidate = 0
 
@@ -54,14 +55,23 @@ export default async function AdminUsersPage() {
                                         <td className="px-6 py-4 text-gray-600">{user.phone}</td>
                                         <td className="px-6 py-4 text-gray-600">{new Date(user.created_at).toLocaleDateString()}</td>
                                         <td className="px-6 py-4 text-right">
-                                            <form action={async () => {
-                                                'use server'
-                                                await approveUser(user.id)
-                                            }}>
-                                                <button className="bg-green-100 text-green-700 hover:bg-green-200 px-4 py-1.5 rounded-lg text-sm font-medium inline-flex items-center transition-colors shadow-sm">
-                                                    <Check className="w-4 h-4 mr-1.5" /> Approve
-                                                </button>
-                                            </form>
+                                            <div className="flex items-center justify-end space-x-2">
+                                                <a
+                                                    href={`/admin/users/${user.id}`}
+                                                    className="text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+                                                >
+                                                    Edit
+                                                </a>
+                                                <form action={async () => {
+                                                    'use server'
+                                                    await approveUser(user.id)
+                                                }}>
+                                                    <button className="bg-green-100 text-green-700 hover:bg-green-200 px-3 py-1.5 rounded-lg text-sm font-medium inline-flex items-center transition-colors">
+                                                        <Check className="w-4 h-4 mr-1.5" /> Approve
+                                                    </button>
+                                                </form>
+                                                <DeleteUserButton userId={user.id} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

@@ -43,72 +43,74 @@ export default async function EditProfilePage() {
                             await updateProfile(formData)
                         }} className="p-6 space-y-6">
 
-                            <div className="space-y-6">
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    id="email"
+                                    defaultValue={profile.email || ''}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                />
+                                <p className="mt-1 text-xs text-amber-600">
+                                    Note: Changing your email will require clicking a confirmation link sent to both your old and new email addresses.
+                                </p>
+                            </div>
+
+                            <div>
+                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    name="fullName"
+                                    id="fullName"
+                                    defaultValue={profile.full_name}
+                                    required
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email (Read Only)</label>
+                                    <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">Company / Clinic</label>
                                     <input
                                         type="text"
-                                        disabled
-                                        value={profile.email}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed"
+                                        name="companyName"
+                                        id="companyName"
+                                        defaultValue={profile.company_name || ''}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
                                     />
-                                    <p className="mt-1 text-xs text-gray-400">Email cannot be changed.</p>
                                 </div>
-
                                 <div>
-                                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                                     <input
                                         type="text"
-                                        name="fullName"
-                                        id="fullName"
-                                        defaultValue={profile.full_name}
-                                        required
-                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                                        name="phone"
+                                        id="phone"
+                                        defaultValue={profile.phone || ''}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
                                     />
                                 </div>
+                            </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                                <h3 className="text-sm font-medium text-blue-800 flex items-center mb-2">
+                                    <Shield className="w-4 h-4 mr-2" />
+                                    Account Status
+                                </h3>
+                                <div className="grid grid-cols-2 gap-4 text-sm">
                                     <div>
-                                        <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-1">Company / Clinic</label>
-                                        <input
-                                            type="text"
-                                            name="companyName"
-                                            id="companyName"
-                                            defaultValue={profile.company_name || ''}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                                        />
+                                        <span className="text-gray-500 block">Role</span>
+                                        <span className="font-medium text-gray-900 capitalize">{profile.role}</span>
                                     </div>
                                     <div>
-                                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                                        <input
-                                            type="text"
-                                            name="phone"
-                                            id="phone"
-                                            defaultValue={profile.phone || ''}
-                                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                                    <h3 className="text-sm font-medium text-blue-800 flex items-center mb-2">
-                                        <Shield className="w-4 h-4 mr-2" />
-                                        Account Status
-                                    </h3>
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                            <span className="text-gray-500 block">Role</span>
-                                            <span className="font-medium text-gray-900 capitalize">{profile.role}</span>
-                                        </div>
-                                        <div>
-                                            <span className="text-gray-500 block">Doctor Approval</span>
-                                            <span className={`font-medium ${profile.is_approved ? 'text-green-600' : 'text-orange-600'}`}>
-                                                {profile.is_approved ? 'Approved' : 'Pending'}
-                                            </span>
-                                        </div>
+                                        <span className="text-gray-500 block">Doctor Approval</span>
+                                        <span className={`font-medium ${profile.is_approved ? 'text-green-600' : 'text-orange-600'}`}>
+                                            {profile.is_approved ? 'Approved' : 'Pending'}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
+
 
                             <div className="pt-6 border-t border-gray-100 flex justify-end space-x-3">
                                 <Link href="/dashboard" className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg font-medium transition-colors">
@@ -125,7 +127,7 @@ export default async function EditProfilePage() {
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }

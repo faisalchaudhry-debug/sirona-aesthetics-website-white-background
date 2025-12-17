@@ -6,8 +6,14 @@ import Link from 'next/link'
 
 export const revalidate = 0
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+    searchParams: Promise<{ message?: string }>;
+}
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
     const supabase = await createClient()
+    const params = await searchParams
+    const successMessage = params.message
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) redirect('/login')
@@ -55,6 +61,21 @@ export default async function DashboardPage() {
             </div>
 
             <div className="container-custom -mt-16 relative z-10 space-y-8">
+                {/* Success Message Banner */}
+                {successMessage && (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-6 shadow-sm flex items-start space-x-4 animate-in fade-in slide-in-from-bottom-2">
+                        <div className="bg-green-100 p-2 rounded-lg flex-shrink-0">
+                            <Mail className="w-6 h-6 text-green-700" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-green-900 mb-1">Update Initiated</h3>
+                            <p className="text-green-800 text-sm leading-relaxed">
+                                {successMessage}
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Pending Approval Banner */}
                 {isPending && (
                     <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 shadow-sm flex items-start space-x-4 animate-in fade-in slide-in-from-bottom-2">
@@ -109,6 +130,20 @@ export default async function DashboardPage() {
                                         </label>
                                         <div className="text-gray-900 font-medium">{profile?.phone || '-'}</div>
                                     </div>
+
+                                    {(profile?.address_line1 || profile?.city) && (
+                                        <div className="group border-t border-gray-100 pt-4 mt-4">
+                                            <label className="flex items-center text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+                                                <Home className="w-3 h-3 mr-2" /> Shipping Address
+                                            </label>
+                                            <div className="text-gray-900 font-medium text-sm leading-relaxed">
+                                                {profile?.address_line1}<br />
+                                                {profile?.address_line2 && <>{profile.address_line2}<br /></>}
+                                                {profile?.city && <>{profile.city},</>} {profile?.state} {profile?.postal_code}<br />
+                                                {profile?.country}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="mt-8 pt-6 border-t border-gray-100">
@@ -180,13 +215,15 @@ export default async function DashboardPage() {
                                                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ring-1 ring-inset
                               ${order.status === 'paid' ? 'bg-green-50 text-green-700 ring-green-600/20' :
                                                                 order.status === 'shipped' ? 'bg-blue-50 text-blue-700 ring-blue-600/20' :
-                                                                    order.status === 'pending' ? 'bg-yellow-50 text-yellow-700 ring-yellow-600/20' :
-                                                                        'bg-gray-50 text-gray-600 ring-gray-500/10'}`}>
+                                                                    order.status === 'delivered' ? 'bg-emerald-50 text-emerald-700 ring-emerald-600/20' :
+                                                                        order.status === 'pending' ? 'bg-yellow-50 text-yellow-700 ring-yellow-600/20' :
+                                                                            order.status === 'cancelled' ? 'bg-red-50 text-red-700 ring-red-600/20' :
+                                                                                'bg-gray-50 text-gray-600 ring-gray-500/10'}`}>
                                                             {order.status}
                                                         </span>
                                                     </td>
                                                     <td className="px-8 py-4 text-right font-medium text-gray-900">
-                                                        ${order.total_amount.toFixed(2)}
+                                                        £{order.total_amount.toFixed(2)}
                                                     </td>
                                                 </tr>
                                             ))}

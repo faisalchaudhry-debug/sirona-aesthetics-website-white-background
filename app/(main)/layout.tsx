@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sirona Aesthetics | Medical Wholesaler",
   description: "Advanced aesthetic solutions for medical professionals.",
+  icons: {
+    icon: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/sktve28306g_1765983407701.png",
+  },
 };
 
 export default function RootLayout({

@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
     title: 'Admin | Sirona Aesthetics',
     description: 'Admin Control Panel',
+    icons: {
+        icon: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/sktve28306g_1765983407701.png",
+    },
 }
 
 export default async function AdminLayout({

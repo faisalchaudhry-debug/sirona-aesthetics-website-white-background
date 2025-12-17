@@ -3,7 +3,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function updateOrderStatus(formData: FormData) {
+export async function updateOrderStatus(orderId: string, status: string) {
     const supabase = await createClient()
 
     // Verify admin
@@ -20,10 +20,25 @@ export async function updateOrderStatus(formData: FormData) {
         return { error: 'Unauthorized' }
     }
 
-    const orderId = formData.get('orderId') as string
-    const status = formData.get('status') as string
+    // Use Service Role Key for reliable updates
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!serviceRoleKey) {
+        return { error: 'Server configuration error' }
+    }
 
-    const { error } = await supabase
+    const { createClient: createAdminClient } = await import('@supabase/supabase-js')
+    const supabaseAdmin = createAdminClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        serviceRoleKey,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false
+            }
+        }
+    )
+
+    const { error } = await supabaseAdmin
         .from('orders')
         .update({ status })
         .eq('id', orderId)

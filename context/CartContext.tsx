@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react'
 
 export interface CartItem {
     id: string
@@ -23,6 +23,7 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: ReactNode }) {
+    console.log('CartProvider mounting')
     const [items, setItems] = useState<CartItem[]>([])
 
     // Load cart from local storage on mount
@@ -42,7 +43,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('cart', JSON.stringify(items))
     }, [items])
 
-    const addItem = (newItem: CartItem) => {
+    const addItem = useCallback((newItem: CartItem) => {
         setItems((currentItems) => {
             const existingItem = currentItems.find((item) => item.id === newItem.id)
             if (existingItem) {
@@ -54,24 +55,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
             }
             return [...currentItems, newItem]
         })
-    }
+    }, [])
 
-    const removeItem = (id: string) => {
+    const removeItem = useCallback((id: string) => {
         setItems((currentItems) => currentItems.filter((item) => item.id !== id))
-    }
+    }, [])
 
-    const updateQuantity = (id: string, quantity: number) => {
+    const updateQuantity = useCallback((id: string, quantity: number) => {
         if (quantity < 1) return
         setItems((currentItems) =>
             currentItems.map((item) =>
                 item.id === id ? { ...item, quantity } : item
             )
         )
-    }
+    }, [])
 
-    const clearCart = () => {
+    const clearCart = useCallback(() => {
         setItems([])
-    }
+    }, [])
 
     const cartTotal = items.reduce((total, item) => total + item.price * item.quantity, 0)
     const cartCount = items.reduce((count, item) => count + item.quantity, 0)

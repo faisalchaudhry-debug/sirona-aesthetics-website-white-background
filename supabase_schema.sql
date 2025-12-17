@@ -5,6 +5,12 @@ create table profiles (
   full_name text,
   company_name text,
   phone text,
+  address_line1 text,
+  address_line2 text,
+  city text,
+  state text,
+  postal_code text,
+  country text,
   role text default 'user' check (role in ('user', 'doctor', 'admin')),
   is_approved boolean default false,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null

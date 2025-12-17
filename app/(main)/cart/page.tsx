@@ -22,9 +22,9 @@ export default function CartPage() {
     }
 
     return (
-        <div className="bg-gray-50 min-h-screen py-12">
+        <div className="min-h-screen py-12">
             <div className="container-custom">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+                <h1 className="text-3xl font-bold text-white mb-8">Shopping Cart</h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Cart Items */}
@@ -94,25 +94,8 @@ export default function CartPage() {
                             </div>
 
                             <button
-                                onClick={async () => {
-                                    try {
-                                        const response = await fetch('/api/checkout', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                            },
-                                            body: JSON.stringify({ items }),
-                                        })
-                                        const data = await response.json()
-                                        if (data.url) {
-                                            window.location.href = data.url
-                                        } else {
-                                            alert('Checkout failed: ' + (data.error || 'Unknown error'))
-                                        }
-                                    } catch (error) {
-                                        console.error('Checkout error:', error)
-                                        alert('An error occurred during checkout.')
-                                    }
+                                onClick={() => {
+                                    window.location.href = '/checkout'
                                 }}
                                 className="w-full btn-primary py-3 font-bold text-lg shadow-lg shadow-blue-500/20 mb-4"
                             >
