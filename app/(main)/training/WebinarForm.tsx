@@ -1,12 +1,12 @@
 'use client'
 
 import { useActionState } from 'react'
-import { registerWebinar } from '@/app/actions/webinar'
+import { registerWebinar, WebinarFormState } from '@/app/actions/webinar'
 import { User, Mail, Building, MessageSquare, ChevronRight, Loader2, CheckCircle2 } from 'lucide-react'
 
-const initialState = {
-    message: null,
-    error: null,
+const initialState: WebinarFormState = {
+    message: '',
+    error: '',
     success: false
 }
 
