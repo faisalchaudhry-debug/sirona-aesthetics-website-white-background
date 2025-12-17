@@ -172,7 +172,7 @@ export default async function DashboardPage() {
                                                     <td className="px-8 py-4 text-gray-600 text-sm">
                                                         {new Date(order.created_at).toLocaleDateString(undefined, {
                                                             year: 'numeric',
-                                                            month: 'medium',
+                                                            month: 'short',
                                                             day: 'numeric'
                                                         })}
                                                     </td>
