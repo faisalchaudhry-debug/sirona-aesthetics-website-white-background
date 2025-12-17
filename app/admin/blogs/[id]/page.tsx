@@ -36,10 +36,7 @@ export default async function EditBlogPage({ params }: { params: Promise<{ id: s
                 </Link>
             </div>
 
-            <form action={async (formData) => {
-                'use server'
-                await updateBlog(formData)
-            }} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+            <form action={updateBlog} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
                 <input type="hidden" name="blogId" value={blog.id} />
                 <input type="hidden" name="current_cover_image" value={blog.cover_image || ''} />
 

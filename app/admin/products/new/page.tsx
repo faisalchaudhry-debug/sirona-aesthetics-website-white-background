@@ -13,10 +13,7 @@ export default function NewProductPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <form action={async (formData) => {
-                    'use server'
-                    await createProduct(formData)
-                }} className="p-6 space-y-6">
+                <form action={createProduct} className="p-6 space-y-6">
                     <div className="space-y-4">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
