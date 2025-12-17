@@ -38,7 +38,10 @@ export default async function EditProfilePage() {
                                 Personal Information
                             </h2>
                         </div>
-                        <form action={updateProfile} className="p-6 space-y-6">
+                        <form action={async (formData) => {
+                            'use server'
+                            await updateProfile(formData)
+                        }} className="p-6 space-y-6">
 
                             <div className="space-y-6">
                                 <div>
