@@ -19,23 +19,13 @@ export default async function LatestBlogs() {
     }
 
     return (
-        <section className="py-24 bg-white border-t border-gray-100">
-            <div className="container-custom">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-12">
-                    <div>
-                        <div className="inline-block mb-4 px-3 py-1 rounded bg-[#d946ef]/10 text-[#d946ef] text-xs uppercase tracking-wider font-bold">
-                            Knowledge Hub
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
-                            Latest <span className="text-gray-500">Insights</span>
-                        </h2>
-                    </div>
-                    <Link
-                        href="/blogs"
-                        className="hidden md:flex items-center text-gray-900 hover:text-[#d946ef] font-bold transition-colors mt-6 md:mt-0"
-                    >
-                        View All Articles <ArrowRight className="w-4 h-4 ml-2" />
-                    </Link>
+        <section className="py-24 bg-white relative">
+            <div className="container-custom relative z-10">
+                <div className="text-center mb-16">
+                    <span className="text-accent text-sm font-bold uppercase tracking-widest mb-2 block">Knowledge Hub</span>
+                    <h2 className="text-4xl md:text-5xl font-bold text-primary">
+                        Latest <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-secondary">Insights</span>
+                    </h2>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -44,13 +34,16 @@ export default async function LatestBlogs() {
                     ))}
                 </div>
 
-                <Link
-                    href="/blogs"
-                    className="flex md:hidden items-center justify-center text-gray-900 hover:text-[#d946ef] font-bold transition-colors mt-12 w-full py-4 bg-gray-100 rounded-lg"
-                >
-                    View All Articles <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+                <div className="mt-12 text-center">
+                    <Link
+                        href="/blogs"
+                        className="inline-flex items-center px-8 py-3 rounded-full border border-primary/20 text-primary font-semibold hover:bg-primary hover:text-white transition-all duration-300"
+                    >
+                        View All Articles <ArrowRight className="w-4 h-4 ml-2" />
+                    </Link>
+                </div>
             </div>
         </section>
     )
 }
+

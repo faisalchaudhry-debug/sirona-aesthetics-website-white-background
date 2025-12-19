@@ -24,14 +24,15 @@ export default function UserMenu() {
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors focus:outline-none"
+                className="flex items-center space-x-2 text-white/80 hover:text-white transition-colors focus:outline-none group"
             >
-                <div className="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center text-primary">
+                <div className="h-8 w-8 bg-white/10 rounded-full flex items-center justify-center text-white group-hover:bg-white/20 transition-colors">
                     <User className="w-5 h-5" />
                 </div>
                 <span className="hidden sm:inline font-medium">Account</span>
                 <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
+
 
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100 animate-in fade-in slide-in-from-top-2 z-50">

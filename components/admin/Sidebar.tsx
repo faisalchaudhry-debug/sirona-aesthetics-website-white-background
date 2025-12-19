@@ -16,7 +16,7 @@ export default function AdminSidebar() {
         { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
         { name: 'Reviews', href: '/admin/reviews', icon: Star },
         { name: 'Blogs', href: '/admin/blogs', icon: FileText },
-        { name: 'Webinars', href: '/admin/webinars', icon: Calendar },
+        { name: 'Contact Forms', href: '/admin/contact-submissions', icon: FileText },
         { name: 'Media', href: '/admin/media', icon: ImageIcon },
     ]
 

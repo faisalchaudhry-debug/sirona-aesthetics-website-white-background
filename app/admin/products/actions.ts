@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 const ADMIN_BUCKET = 'product-images'
 
@@ -32,8 +31,12 @@ export async function deleteProductMedia(mediaId: string) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Unauthorized' }
 
-    // Check if media exists first to get URL (optional cleanup of storage)
-    // For now just deleting db record
+    // Get product ID before deleting
+    const { data: media } = await supabase
+        .from('product_media')
+        .select('product_id')
+        .eq('id', mediaId)
+        .single()
 
     const { error } = await supabase
         .from('product_media')
@@ -41,6 +44,11 @@ export async function deleteProductMedia(mediaId: string) {
         .eq('id', mediaId)
 
     if (error) return { error: error.message }
+
+    if (media?.product_id) {
+        await syncMainImage(media.product_id)
+    }
+
     return { success: true }
 }
 
@@ -51,6 +59,49 @@ export async function deleteProduct(productId: string) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { error: 'Unauthorized' }
 
+    // Soft Delete
+    const { error } = await supabase
+        .from('products')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', productId)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    revalidatePath('/admin/products')
+    return { success: true }
+}
+
+export async function restoreProduct(productId: string) {
+    const supabase = await createClient()
+
+    // Verify admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    // Restore
+    const { error } = await supabase
+        .from('products')
+        .update({ deleted_at: null })
+        .eq('id', productId)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    revalidatePath('/admin/products')
+    return { success: true }
+}
+
+export async function permanentDeleteProduct(productId: string) {
+    const supabase = await createClient()
+
+    // Verify admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    // Hard Delete
     const { error } = await supabase
         .from('products')
         .delete()
@@ -96,6 +147,28 @@ async function handleMediaUploads(productId: string, formData: FormData) {
             }
         }
     }
+
+    await syncMainImage(productId)
+}
+
+async function syncMainImage(productId: string) {
+    const supabase = await createClient()
+
+    // Get the first gallery image
+    const { data: firstImage } = await supabase
+        .from('product_media')
+        .select('url')
+        .eq('product_id', productId)
+        .eq('media_type', 'gallery')
+        .order('created_at', { ascending: true })
+        .limit(1)
+        .single()
+
+    // Update product image_url
+    await supabase
+        .from('products')
+        .update({ image_url: firstImage?.url || null })
+        .eq('id', productId)
 }
 
 export async function createProduct(formData: FormData) {
@@ -112,7 +185,7 @@ export async function createProduct(formData: FormData) {
         sale_price: formData.get('sale_price') ? parseFloat(formData.get('sale_price') as string) : null,
         stock: parseInt(formData.get('stock') as string),
         category: formData.get('category') as string,
-        is_active: true // default active for new simplified form
+        is_active: formData.get('is_active') === 'true'
     }
 
     const { data: product, error } = await supabase
@@ -126,7 +199,7 @@ export async function createProduct(formData: FormData) {
     await handleMediaUploads(product.id, formData)
 
     revalidatePath('/admin/products')
-    redirect('/admin/products')
+    return { success: true, id: product.id }
 }
 
 export async function updateProduct(formData: FormData) {
@@ -141,7 +214,9 @@ export async function updateProduct(formData: FormData) {
         price: parseFloat(formData.get('price') as string),
         sale_price: formData.get('sale_price') ? parseFloat(formData.get('sale_price') as string) : null,
         stock: parseInt(formData.get('stock') as string),
-        category: formData.get('category') as string
+        category: formData.get('category') as string,
+        updated_at: new Date().toISOString(),
+        is_active: formData.get('is_active') === 'true'
     }
 
     const { error } = await supabase
@@ -156,5 +231,5 @@ export async function updateProduct(formData: FormData) {
     revalidatePath('/admin/products')
     revalidatePath(`/admin/products/${productId}`)
     revalidatePath(`/products`) // Update public pages too
-    redirect('/admin/products')
+    return { success: true }
 }

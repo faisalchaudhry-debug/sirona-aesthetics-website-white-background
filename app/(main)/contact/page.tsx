@@ -1,4 +1,5 @@
-import { Mail, MapPin, Phone, Clock, Send } from 'lucide-react'
+import { Mail, MapPin, Phone, ArrowRight } from 'lucide-react'
+import ContactForm from '@/components/contact/ContactForm'
 
 export const metadata = {
     title: 'Contact Us | Sirona Aesthetics',
@@ -7,30 +8,39 @@ export const metadata = {
 
 export default function ContactPage() {
     return (
-        <div className="min-h-screen bg-[#0A1128] text-white selection:bg-accent selection:text-white">
+        <div className="min-h-screen bg-[#2D2654] text-white selection:bg-accent selection:text-white font-sans">
+
+            {/* Background Decoration */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-brand opacity-10 rounded-full blur-[150px] animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-secondary opacity-10 rounded-full blur-[150px]"></div>
+            </div>
 
             {/* Header */}
-            <section className="pt-40 pb-10 container-custom text-center">
-                <h1 className="text-5xl font-bold mb-4">Get in Touch</h1>
-                <p className="text-xl text-gray-400 max-w-xl mx-auto">
-                    Our support team is here to assist clinics and practitioners.
+            <section className="relative pt-32 pb-16 container-custom text-center z-10">
+                <span className="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-accent text-sm font-bold uppercase tracking-widest mb-6 backdrop-blur-sm">
+                    Support & Inquiries
+                </span>
+                <h1 className="text-5xl md:text-7xl font-bold mb-6">Get in <span className="text-transparent bg-clip-text bg-gradient-brand">Touch</span></h1>
+                <p className="text-xl text-gray-300 max-w-xl mx-auto leading-relaxed">
+                    Our support team is here to assist clinics and practitioners. Reach out to us for any questions.
                 </p>
             </section>
 
-            <section className="py-12 pb-24">
+            <section className="relative py-12 pb-24 z-10">
                 <div className="container-custom">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
 
                         {/* Contact Info Side */}
                         <div className="space-y-8">
-                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                                        <MapPin className="w-6 h-6 text-blue-400" />
+                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                                <div className="flex items-start space-x-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-[#1A1433] flex items-center justify-center shrink-0 border border-white/5 shadow-lg group-hover:scale-110 transition-transform">
+                                        <MapPin className="w-6 h-6 text-secondary" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold mb-2">Headquarters</h3>
-                                        <p className="text-gray-400 leading-relaxed">
+                                        <h3 className="text-2xl font-bold mb-3 text-white">Headquarters</h3>
+                                        <p className="text-gray-400 leading-relaxed text-lg">
                                             Sirona Aesthetics HQ<br />
                                             Business Bay, Building 4<br />
                                             Dubai, United Arab Emirates
@@ -39,31 +49,31 @@ export default function ContactPage() {
                                 </div>
                             </div>
 
-                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center shrink-0">
+                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                                <div className="flex items-start space-x-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-[#1A1433] flex items-center justify-center shrink-0 border border-white/5 shadow-lg group-hover:scale-110 transition-transform">
                                         <Mail className="w-6 h-6 text-accent" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold mb-2">Email Us</h3>
+                                        <h3 className="text-2xl font-bold mb-3 text-white">Email Us</h3>
                                         <p className="text-gray-400 mb-4">For general inquiries and support.</p>
-                                        <a href="mailto:info@sirona-aesthetics.com" className="text-white font-semibold hover:text-accent transition-colors">
-                                            info@sirona-aesthetics.com
+                                        <a href="mailto:info@sirona-aesthetics.com" className="text-xl font-bold text-white hover:text-accent transition-colors flex items-center">
+                                            info@sirona-aesthetics.com <ArrowRight className="ml-2 w-5 h-5" />
                                         </a>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                                <div className="flex items-start space-x-4">
-                                    <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                            <div className="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors group">
+                                <div className="flex items-start space-x-6">
+                                    <div className="w-14 h-14 rounded-2xl bg-[#1A1433] flex items-center justify-center shrink-0 border border-white/5 shadow-lg group-hover:scale-110 transition-transform">
                                         <Phone className="w-6 h-6 text-green-400" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xl font-bold mb-2">Call Us</h3>
+                                        <h3 className="text-2xl font-bold mb-3 text-white">Call Us</h3>
                                         <p className="text-gray-400 mb-4">Mon-Fri from 9am to 6pm.</p>
-                                        <a href="tel:+971500000000" className="text-white font-semibold hover:text-green-400 transition-colors">
-                                            +971 50 000 0000
+                                        <a href="tel:+971500000000" className="text-xl font-bold text-white hover:text-green-400 transition-colors flex items-center">
+                                            +971 50 000 0000 <ArrowRight className="ml-2 w-5 h-5" />
                                         </a>
                                     </div>
                                 </div>
@@ -71,45 +81,7 @@ export default function ContactPage() {
                         </div>
 
                         {/* Form Side */}
-                        <div className="bg-[#131B3A] p-8 md:p-10 rounded-3xl border border-white/5 shadow-2xl">
-                            <h3 className="text-2xl font-bold mb-6">Send us a message</h3>
-                            <form className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-400">First Name</label>
-                                        <input type="text" className="w-full bg-[#0A1128] border border-white/10 rounded-xl px-4 py-3 placeholder-gray-600 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="John" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-400">Last Name</label>
-                                        <input type="text" className="w-full bg-[#0A1128] border border-white/10 rounded-xl px-4 py-3 placeholder-gray-600 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="Doe" />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-400">Email Address</label>
-                                    <input type="email" className="w-full bg-[#0A1128] border border-white/10 rounded-xl px-4 py-3 placeholder-gray-600 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="john@clinic.com" />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-400">Subject</label>
-                                    <select className="w-full bg-[#0A1128] border border-white/10 rounded-xl px-4 py-3 text-gray-300 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all">
-                                        <option>General Inquiry</option>
-                                        <option>Product Support</option>
-                                        <option>Training Request</option>
-                                        <option>Wholesale/Distribution</option>
-                                    </select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-400">Message</label>
-                                    <textarea rows={4} className="w-full bg-[#0A1128] border border-white/10 rounded-xl px-4 py-3 placeholder-gray-600 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all" placeholder="How can we help you?"></textarea>
-                                </div>
-
-                                <button type="button" className="w-full py-4 bg-gradient-to-r from-accent to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-accent/25 hover:opacity-90 transition-all flex items-center justify-center">
-                                    Send Message <Send className="ml-2 w-5 h-5" />
-                                </button>
-                            </form>
-                        </div>
+                        <ContactForm />
                     </div>
                 </div>
             </section>
@@ -117,3 +89,4 @@ export default function ContactPage() {
         </div>
     )
 }
+

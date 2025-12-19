@@ -48,6 +48,25 @@ export async function signup(formData: FormData) {
         return redirect('/register?message=Could not create user')
     }
 
+    // Send data to GHL Webhook
+    try {
+        await fetch('https://services.leadconnectorhq.com/hooks/OdylxFk47CSXq3mt6RoF/webhook-trigger/9740ca4c-7028-4388-b270-ac356098ec8d', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                fullName,
+                companyName,
+                phone,
+                email,
+            }),
+        })
+    } catch (err) {
+        console.error('Failed to send data to GHL webhook:', err)
+        // Continue even if webhook fails
+    }
+
     return redirect('/login?message=Check email to continue sign in process')
 }
 

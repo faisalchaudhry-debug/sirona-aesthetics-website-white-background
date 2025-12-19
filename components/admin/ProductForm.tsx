@@ -38,9 +38,18 @@ export default function ProductForm({ product }: { product?: Product }) {
         if (!files) return
 
         const newPreviews: string[] = []
+        const MAX_SIZE = 5 * 1024 * 1024 // 5MB
+
         Array.from(files).forEach(file => {
+            if (file.size > MAX_SIZE) {
+                alert(`File ${file.name} is too large. Max size is 5MB.`)
+                return
+            }
             newPreviews.push(URL.createObjectURL(file))
         })
+
+        // If we filtered out all files due to size, don't update state
+        if (newPreviews.length === 0 && files.length > 0) return
 
         if (type === 'gallery') {
             setGalleryPreviews(prev => [...prev, ...newPreviews])
@@ -63,14 +72,39 @@ export default function ProductForm({ product }: { product?: Product }) {
     const handleSubmit = async (formData: FormData) => {
         setIsSubmitting(true)
         try {
+            let result
             if (product?.id) {
-                await updateProduct(formData)
+                // Determine which files to delete based on the form state (if any custom logic was needed, but here we just submit)
+                result = await updateProduct(formData)
             } else {
-                await createProduct(formData)
+                result = await createProduct(formData)
+            }
+
+            if (result && result.error) {
+                alert(`Error: ${result.error}`)
+                return
+            }
+
+            if (result?.success) {
+                if (product?.id) {
+                    // Update: Stay on page
+                    alert('Product updated successfully!')
+                    setGalleryPreviews([])
+                    setBeforeAfterPreviews([])
+                    router.refresh()
+                } else if ((result as any).id) {
+                    // Create: Redirect to edit page
+                    router.push(`/admin/products/${(result as any).id}`)
+                    router.refresh()
+                } else {
+                    // Fallback
+                    router.push('/admin/products')
+                    router.refresh()
+                }
             }
         } catch (error) {
             console.error('Error submitting form:', error)
-            alert('Failed to save product')
+            alert(`Failed to save product: ${error instanceof Error ? error.message : 'Unknown error'}`)
         } finally {
             setIsSubmitting(false)
         }
@@ -111,7 +145,18 @@ export default function ProductForm({ product }: { product?: Product }) {
                                 <input type="number" name="sale_price" step="0.01" defaultValue={product?.sale_price ?? ''} className="w-full px-4 py-2 border rounded-lg" />
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                <select
+                                    name="is_active"
+                                    defaultValue={product?.is_active ? 'true' : 'false'}
+                                    className="w-full px-4 py-2 border rounded-lg bg-white"
+                                >
+                                    <option value="true">Active (Visible)</option>
+                                    <option value="false">Draft (Hidden)</option>
+                                </select>
+                            </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
                                 <input type="number" name="stock" defaultValue={product?.stock ?? 0} required className="w-full px-4 py-2 border rounded-lg" />

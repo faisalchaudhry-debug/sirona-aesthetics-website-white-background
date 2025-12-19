@@ -1,25 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1B1464;
-  --color-secondary: #00AEEF;
-  --color-accent: #EC008C;
-  --color-highlight: #FFF200;
+  --color-primary: #2D2654;
+  --color-secondary: #3B82F6;
+  --color-accent: #FF6B9D;
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 :root {
-  --background: #0A1128;
-  --foreground: #FFFFFF;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #FFFFFF;
+  --foreground: #0B1121;
+  --sirona-navy: #2D2654;
+  --sirona-light-navy: #3A3366;
+  --sirona-dark-navy: #1A1433;
 }
 
 body {
@@ -29,14 +24,32 @@ body {
 }
 
 /* Custom Utilities */
-@utility btn-primary {
-  @apply bg-[var(--color-primary)] text-white px-4 py-2 rounded hover:opacity-90 transition-opacity;
-}
-
-@utility btn-secondary {
-  @apply bg-[var(--color-secondary)] text-white px-4 py-2 rounded hover:opacity-90 transition-opacity;
-}
-
 @utility container-custom {
-  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@utility text-gradient {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B9D] via-[#FF8E53] via-[#FFC837] via-[#4ADE80] to-[#3B82F6];
+}
+
+@utility bg-gradient-brand {
+  @apply bg-gradient-to-r from-[#FF6B9D] via-[#FF8E53] via-[#FFC837] via-[#4ADE80] to-[#3B82F6];
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }

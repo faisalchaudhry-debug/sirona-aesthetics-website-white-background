@@ -105,7 +105,7 @@ export default function MediaGalleryPage() {
                 <div className="relative">
                     <input
                         type="file"
-                        accept="image/*"
+                        accept="image/*,video/*"
                         onChange={handleUpload}
                         className="hidden"
                         id="media-upload"
@@ -120,7 +120,7 @@ export default function MediaGalleryPage() {
                         ) : (
                             <Upload className="w-5 h-5 mr-2" />
                         )}
-                        {uploading ? 'Uploading...' : 'Upload Image'}
+                        {uploading ? 'Uploading...' : 'Upload Media'}
                     </label>
                 </div>
             </div>
@@ -145,14 +145,25 @@ export default function MediaGalleryPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {files.map((file) => {
                         const url = getPublicUrl(file.name)
+                        const isVideo = file.name.match(/\.(mp4|webm|ogg|mov)$/i)
+
                         return (
                             <div key={file.id} className="group relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all">
                                 <div className="aspect-square w-full overflow-hidden rounded-t-lg bg-gray-100 relative">
-                                    <img
-                                        src={url}
-                                        alt={file.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                    />
+                                    {isVideo ? (
+                                        <video
+                                            src={url}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            controls
+                                            muted
+                                        />
+                                    ) : (
+                                        <img
+                                            src={url}
+                                            alt={file.name}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                    )}
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 gap-2">
                                         <button
                                             onClick={() => copyToClipboard(url)}

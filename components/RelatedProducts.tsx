@@ -31,7 +31,7 @@ export default async function RelatedProducts({ currentProductId, showPrice, cat
     const shuffled = [...products].sort(() => 0.5 - Math.random())
 
     return (
-        <div className="mt-24 border-t border-white/10 pt-16">
+        <div>
             <ProductSlider products={shuffled} showPrice={showPrice} />
         </div>
     )

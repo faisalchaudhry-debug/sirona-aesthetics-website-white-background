@@ -46,6 +46,49 @@ export async function deleteBlog(blogId: string) {
         return { error: 'Unauthorized' }
     }
 
+    // Soft delete
+    const { error } = await supabase
+        .from('blogs')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', blogId)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    revalidatePath('/admin/blogs')
+    return { success: true }
+}
+
+export async function restoreBlog(blogId: string) {
+    const supabase = await createClient()
+
+    // Verify admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    // Restore
+    const { error } = await supabase
+        .from('blogs')
+        .update({ deleted_at: null })
+        .eq('id', blogId)
+
+    if (error) {
+        return { error: error.message }
+    }
+
+    revalidatePath('/admin/blogs')
+    return { success: true }
+}
+
+export async function permanentDeleteBlog(blogId: string) {
+    const supabase = await createClient()
+
+    // Verify admin
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Unauthorized' }
+
+    // Hard delete
     const { error } = await supabase
         .from('blogs')
         .delete()
@@ -89,7 +132,7 @@ export async function createBlog(formData: FormData) {
     const published_at = formData.get('published_at') as string
     const is_published = formData.get('is_published') === 'on'
 
-    const { error } = await supabase
+    const { data: blog, error } = await supabase
         .from('blogs')
         .insert({
             title,
@@ -104,13 +147,15 @@ export async function createBlog(formData: FormData) {
             is_published,
             cover_image
         })
+        .select()
+        .single()
 
     if (error) {
         return { error: error.message }
     }
 
     revalidatePath('/admin/blogs')
-    return redirect('/admin/blogs')
+    return redirect(`/admin/blogs/${blog.id}`)
 }
 
 export async function updateBlog(formData: FormData) {
@@ -169,5 +214,7 @@ export async function updateBlog(formData: FormData) {
     }
 
     revalidatePath('/admin/blogs')
-    return redirect('/admin/blogs')
+    revalidatePath(`/admin/blogs/${blogId}`)
+    // redirect('/admin/blogs') // Removed redirect to stay on page
+    return { success: true }
 }

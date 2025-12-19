@@ -13,11 +13,15 @@
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.86.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "react-hook-form": "^7.68.0",
+    "react-intersection-observer": "^10.0.0",
     "stripe": "^20.0.0",
+    "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {

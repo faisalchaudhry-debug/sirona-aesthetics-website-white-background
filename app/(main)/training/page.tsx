@@ -1,32 +1,33 @@
-import { Microscope, Hand, Award, Mail, ChevronRight, Calendar, User, Building, MessageSquare } from 'lucide-react'
+import { Microscope, Hand, Award, Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import WebinarForm from './WebinarForm'
 
 export default function TrainingPage() {
     return (
-        <div className="bg-white min-h-screen font-sans">
+        <div className="bg-[#2D2654] min-h-screen font-sans selection:bg-accent selection:text-white">
             {/* Hero Section */}
-            <section className="relative bg-[#0B1121] text-white py-24 md:py-32 overflow-hidden">
-                {/* Background Decorations */}
-                <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[#131B3A] to-transparent opacity-50"></div>
-                <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-[#d946ef] rounded-full filter blur-[128px] opacity-20"></div>
+            <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden text-center">
+                {/* Background Decoration */}
+                <div className="absolute inset-0 bg-gradient-to-b from-[#1A1433] to-[#2D2654] pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-brand opacity-10 rounded-full blur-[150px] pointer-events-none animate-pulse"></div>
 
                 <div className="container-custom relative z-10">
-                    <div className="max-w-3xl">
-                        <span className="inline-block py-1 px-3 rounded-full bg-[#d946ef]/10 text-[#d946ef] text-xs font-bold uppercase tracking-wider mb-6 border border-[#d946ef]/20">
-                            Book Webinar
+                    <div className="max-w-4xl mx-auto">
+                        <span className="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-accent text-sm font-bold uppercase tracking-widest mb-8 backdrop-blur-sm">
+                            Professional Education
                         </span>
-                        <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                            Learn with <span className="text-[#d946ef]">Sirona</span>
+                        <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white">
+                            Master the Art of <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-brand">Bio-Remodeling</span>
                         </h1>
-                        <p className="text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl">
-                            Expert-led workshops and masterclasses designed for certified practitioners — practical, clinical, and results-driven.
+                        <p className="text-xl text-gray-300 mb-12 leading-relaxed max-w-2xl mx-auto">
+                            Expert-led workshops and masterclasses designed for certified practitioners. Practical, clinical, and results-driven education to elevate your practice.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <a href="#register" className="inline-flex justify-center items-center px-8 py-4 bg-[#d946ef] hover:bg-[#c026d3] text-white font-bold rounded-lg transition-all shadow-lg shadow-[#d946ef]/25">
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                            <a href="#register" className="inline-flex justify-center items-center px-10 py-4 bg-gradient-brand text-white font-bold rounded-full transition-all shadow-[0_0_30px_rgba(255,107,157,0.4)] hover:shadow-[0_0_50px_rgba(255,107,157,0.6)] hover:scale-105">
                                 Register Interest
                             </a>
-                            <Link href="/contact" className="inline-flex justify-center items-center px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-lg border border-white/10 transition-all">
+                            <Link href="/contact" className="inline-flex justify-center items-center px-10 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all">
                                 Contact Us
                             </Link>
                         </div>
@@ -35,45 +36,45 @@ export default function TrainingPage() {
             </section>
 
             {/* Why Train with Sirona Section */}
-            <section className="py-24 bg-white">
+            <section className="py-24 bg-white relative">
                 <div className="container-custom">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-[#131B3A] mb-4">
-                            Why Train with <span className="text-[#d946ef]">Sirona?</span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-sirona-navy mb-6">
+                            Why Train with <span className="text-accent">Sirona?</span>
                         </h2>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Card 1 */}
-                        <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all group">
-                            <div className="w-14 h-14 rounded-xl bg-[#131B3A] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Microscope className="w-7 h-7 text-[#d946ef]" />
+                        <div className="p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+                            <div className="w-16 h-16 rounded-2xl bg-gradient-brand flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform">
+                                <Microscope className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold text-[#131B3A] mb-3">Science-Led</h3>
+                            <h3 className="text-2xl font-bold text-sirona-navy mb-4">Science-Led</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Grounded in evidence-based protocols and enzymatic innovation for clinical confidence.
+                                Grounded in evidence-based protocols and enzymatic innovation. We focus on the "why" and "how" behind every treatment.
                             </p>
                         </div>
 
                         {/* Card 2 */}
-                        <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all group">
-                            <div className="w-14 h-14 rounded-xl bg-[#131B3A] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Hand className="w-7 h-7 text-[#38bdf8]" />
+                        <div className="p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+                            <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform">
+                                <Hand className="w-8 h-8 text-white" />
                             </div>
-                            <h3 className="text-xl font-bold text-[#131B3A] mb-3">Hands-On</h3>
+                            <h3 className="text-2xl font-bold text-sirona-navy mb-4">Hands-On</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Workshops designed to refine technique with practical skills you can apply immediately.
+                                Workshops designed to refine technique with practical skills you can apply immediately in your clinic.
                             </p>
                         </div>
 
                         {/* Card 3 */}
-                        <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all group">
-                            <div className="w-14 h-14 rounded-xl bg-[#131B3A] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Award className="w-7 h-7 text-[#fbbf24]" />
+                        <div className="p-10 rounded-3xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+                            <div className="w-16 h-16 rounded-2xl bg-[#FFC837] flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform">
+                                <Award className="w-8 h-8 text-[#1A1433]" />
                             </div>
-                            <h3 className="text-xl font-bold text-[#131B3A] mb-3">Certification</h3>
+                            <h3 className="text-2xl font-bold text-sirona-navy mb-4">Certification</h3>
                             <p className="text-gray-600 leading-relaxed">
-                                Professional recognition that enhances trust, credibility, and patient outcomes.
+                                Receive professional certification that enhances trust, credibility, and patient outcomes for your practice.
                             </p>
                         </div>
                     </div>
@@ -81,46 +82,54 @@ export default function TrainingPage() {
             </section>
 
             {/* Upcoming Sessions & Form Section */}
-            <section id="register" className="bg-[#131B3A] py-24 text-white relative overflow-hidden">
+            <section id="register" className="py-24 relative overflow-hidden">
                 {/* Decorative Elements */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#d946ef] rounded-full filter blur-[150px] opacity-10"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#38bdf8] rounded-full filter blur-[150px] opacity-10"></div>
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
                 <div className="container-custom relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
                         {/* Left Column: Upcoming Sessions */}
                         <div>
-                            <h2 className="text-3xl font-bold mb-8 flex items-center">
-                                <Calendar className="w-8 h-8 mr-3 text-[#d946ef]" />
-                                Upcoming Training Sessions
-                            </h2>
-
-                            <div className="bg-white/5 border border-white/10 rounded-2xl p-10 text-center">
-                                <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                                    <Calendar className="w-8 h-8 text-gray-400" />
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">No Sessions Currently Open</h3>
-                                <p className="text-gray-400 max-w-sm mx-auto">
-                                    No sessions are open for booking right now. Join our list to be the first notified when new dates are announced.
-                                </p>
+                            <div className="flex items-center gap-4 mb-8">
+                                <span className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
+                                    <Calendar className="w-6 h-6 text-accent" />
+                                </span>
+                                <h2 className="text-3xl font-bold text-white">
+                                    Upcoming Sessions
+                                </h2>
                             </div>
 
-                            <div className="mt-12 p-6 bg-[#d946ef]/10 rounded-xl border border-[#d946ef]/20">
-                                <h4 className="font-bold text-[#d946ef] mb-2">Want a private workshop?</h4>
-                                <p className="text-gray-300 text-sm mb-4">
+                            <div className="bg-[#1A1433] border border-white/10 rounded-3xl p-10 text-center relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <Calendar className="w-10 h-10 text-gray-500" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-3">No Sessions Currently Open</h3>
+                                    <p className="text-gray-400 max-w-sm mx-auto mb-8">
+                                        No public sessions are open for booking right now. Join our waitlist to be notified first.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-12 p-8 bg-gradient-to-br from-[#d946ef]/20 to-transparent rounded-3xl border border-[#d946ef]/30">
+                                <h4 className="text-xl font-bold text-white mb-2">Want a private workshop?</h4>
+                                <p className="text-gray-300 mb-6">
                                     We offer bespoke in-clinic training for teams of 4 or more.
                                 </p>
-                                <Link href="/contact" className="text-white text-sm font-bold underline hover:text-[#d946ef] transition-colors">
-                                    Contact us to arrange →
+                                <Link href="/contact" className="inline-flex items-center text-accent font-bold hover:text-white transition-colors">
+                                    Contact us to arrange <ChevronRight className="w-5 h-5 ml-1" />
                                 </Link>
                             </div>
                         </div>
 
                         {/* Right Column: Waitlist Form */}
                         <div>
-                            <h2 className="text-3xl font-bold mb-8">
-                                Join the <span className="text-[#d946ef]">Waitlist</span>
-                            </h2>
+                            <div className="mb-8">
+                                <h2 className="text-3xl font-bold text-white mb-2">
+                                    Join the <span className="text-accent">Waitlist</span>
+                                </h2>
+                                <p className="text-gray-400">Be the first to know when new training dates are released.</p>
+                            </div>
 
                             <WebinarForm />
                         </div>
@@ -130,3 +139,4 @@ export default function TrainingPage() {
         </div>
     )
 }
+

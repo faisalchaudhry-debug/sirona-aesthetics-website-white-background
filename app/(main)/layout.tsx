@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -35,7 +36,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <CartProvider>
-          <Navbar />
+          <Suspense fallback={<div className="h-20 bg-sirona-navy/10 animate-pulse" />}>
+            <Navbar />
+          </Suspense>
           <main className="flex-grow">
             {children}
           </main>

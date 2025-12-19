@@ -56,11 +56,11 @@ export default function ProductFilterBar({ currentCategory }: { currentCategory?
     }, [debouncedSearch, router, searchParams])
 
     return (
-        <div className="sticky top-20 z-30 mb-12">
-            <div className="bg-[#131B3A]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-2 md:p-3 shadow-2xl shadow-black/50">
+        <div className="sticky top-24 z-30 mb-12">
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full p-2 shadow-xl shadow-gray-200/50 max-w-5xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     {/* Category Pills */}
-                    <div className="flex space-x-1 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                    <div className="flex space-x-1 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide px-2">
                         {CATEGORIES.map((cat) => {
                             const isActive = (!currentCategory && cat.id === 'all') || currentCategory === cat.id
                             return (
@@ -68,9 +68,9 @@ export default function ProductFilterBar({ currentCategory }: { currentCategory?
                                     key={cat.id}
                                     href={cat.href}
                                     scroll={false}
-                                    className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center ${isActive
-                                        ? 'bg-[#d946ef] text-white shadow-lg shadow-[#d946ef]/25'
-                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    className={`px-6 py-3 rounded-full text-sm font-bold transition-all whitespace-nowrap flex items-center ${isActive
+                                        ? 'bg-gradient-brand text-white shadow-lg shadow-accent/25'
+                                        : 'text-gray-500 hover:text-sirona-navy hover:bg-gray-100'
                                         }`}
                                 >
                                     {cat.name}
@@ -80,19 +80,19 @@ export default function ProductFilterBar({ currentCategory }: { currentCategory?
                     </div>
 
                     {/* Search Input */}
-                    <div className="relative w-full md:w-64">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <div className="relative w-full md:w-72 pr-2">
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
                             type="text"
                             placeholder="Search products..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full bg-[#0B1121] border border-white/10 rounded-lg py-2.5 pl-10 pr-10 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#d946ef] focus:ring-1 focus:ring-[#d946ef] transition-all"
+                            className="w-full bg-gray-50 border border-gray-200 rounded-full py-3 pl-12 pr-10 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                         />
                         {searchTerm && (
                             <button
                                 onClick={() => setSearchTerm('')}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                             >
                                 <X className="w-3 h-3" />
                             </button>
