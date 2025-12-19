@@ -39,17 +39,39 @@ export async function approveUser(userId: string) {
     )
 
     // Update user
-    const { error } = await supabaseAdmin
+    const { data: updatedProfile, error } = await supabaseAdmin
         .from('profiles')
         .update({ is_approved: true, role: 'doctor' })
         .eq('id', userId)
+        .select()
+        .single()
 
     if (error) {
         return { error: error.message }
     }
 
+    // Send to CRM Webhook
+    await sendToCrmWebhook(updatedProfile)
+
     revalidatePath('/admin/users')
     return { success: true }
+}
+
+async function sendToCrmWebhook(profile: any) {
+    try {
+        const webhookUrl = 'https://services.leadconnectorhq.com/hooks/OdylxFk47CSXq3mt6RoF/webhook-trigger/ce9150c8-5999-450b-b572-89960cb392fe'
+
+        await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(profile),
+        })
+    } catch (error) {
+        console.error('Failed to send to CRM webhook:', error)
+        // We do not fail the request if webhook fails, just log it
+    }
 }
 
 export async function deleteUser(userId: string) {
@@ -151,7 +173,7 @@ export async function updateUser(formData: FormData) {
         }
     )
 
-    const { error } = await supabaseAdmin
+    const { data: updatedProfile, error } = await supabaseAdmin
         .from('profiles')
         .update({
             full_name: fullName,
@@ -167,9 +189,16 @@ export async function updateUser(formData: FormData) {
             country
         })
         .eq('id', userId)
+        .select()
+        .single()
 
     if (error) {
         return { error: error.message }
+    }
+
+    // Trigger webhook ONLY if user is approved
+    if (updatedProfile.is_approved) {
+        await sendToCrmWebhook(updatedProfile)
     }
 
     revalidatePath('/admin/users')

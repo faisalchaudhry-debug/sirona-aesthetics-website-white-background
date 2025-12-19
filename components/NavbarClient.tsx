@@ -27,6 +27,7 @@ export default function NavbarClient({ children, user }: NavbarClientProps) {
     }, []);
 
     const navLinks = [
+        { name: 'Home', href: '/' },
         { name: 'Products', href: '/products' },
         { name: 'UKRP', href: '/ukrp' },
         { name: 'Training', href: '/training' },

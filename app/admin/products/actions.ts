@@ -5,6 +5,13 @@ import { revalidatePath } from 'next/cache'
 
 const ADMIN_BUCKET = 'product-images'
 
+function generateSlug(name: string): string {
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '')
+}
+
 async function uploadImage(file: File) {
     const supabase = await createClient()
     const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '')}`
@@ -178,6 +185,7 @@ export async function createProduct(formData: FormData) {
 
     const productData = {
         name: formData.get('name') as string,
+        slug: generateSlug(formData.get('name') as string),
         description: formData.get('description') as string,
         short_description: formData.get('short_description') as string,
         long_description: formData.get('long_description') as string,
@@ -208,6 +216,7 @@ export async function updateProduct(formData: FormData) {
 
     const productData = {
         name: formData.get('name') as string,
+        slug: generateSlug(formData.get('name') as string),
         description: formData.get('description') as string,
         short_description: formData.get('short_description') as string,
         long_description: formData.get('long_description') as string,
@@ -230,6 +239,8 @@ export async function updateProduct(formData: FormData) {
 
     revalidatePath('/admin/products')
     revalidatePath(`/admin/products/${productId}`)
-    revalidatePath(`/products`) // Update public pages too
+    revalidatePath(`/admin/products/${productId}`)
+    revalidatePath(`/products`) // Update public pages
+    revalidatePath(`/products/${generateSlug(formData.get('name') as string)}`) // Update specific product page
     return { success: true }
 }

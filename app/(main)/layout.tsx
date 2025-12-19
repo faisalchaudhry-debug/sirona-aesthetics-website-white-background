@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import "../globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CartProvider } from "@/context/CartContext";
+import { Providers } from "@/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
         suppressHydrationWarning
       >
-        <CartProvider>
+        <Providers>
           <Suspense fallback={<div className="h-20 bg-sirona-navy/10 animate-pulse" />}>
             <Navbar />
           </Suspense>
@@ -43,7 +43,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-        </CartProvider>
+        </Providers>
       </body>
     </html>
   );

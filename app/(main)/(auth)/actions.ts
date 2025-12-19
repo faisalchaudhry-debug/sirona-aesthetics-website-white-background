@@ -67,7 +67,7 @@ export async function signup(formData: FormData) {
         // Continue even if webhook fails
     }
 
-    return redirect('/login?message=Check email to continue sign in process')
+    return redirect('/thank-you')
 }
 
 export async function logout() {
