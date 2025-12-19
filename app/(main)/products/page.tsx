@@ -79,7 +79,7 @@ export default async function ProductsPage({
                         Professional Catalog
                     </span>
                     <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                        Professional <span className="text-transparent bg-clip-text bg-gradient-brand">Collection</span>
+                        <span className="text-gradient-ocean">Professional Collection</span>
                     </h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
                         Curated aesthetic solutions for certified practitioners. Browse our range of enzymes and skin boosters.

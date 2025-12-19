@@ -23,8 +23,7 @@ export default function AboutPage() {
                         </span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
-                        Pioneering <span className="text-transparent bg-clip-text bg-gradient-brand">Aesthetic</span> <br />
-                        Excellence
+                        Pioneering <span className="text-gradient-ocean">Aesthetic Excellence</span>
                     </h1>
                     <p className="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
                         Sirona Aesthetics bridges the gap between scientific innovation and clinical application. We are the exclusive distributors of next-generation recombinant enzymology.

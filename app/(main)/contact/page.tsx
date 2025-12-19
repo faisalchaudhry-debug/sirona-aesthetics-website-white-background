@@ -21,7 +21,7 @@ export default function ContactPage() {
                 <span className="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-accent text-sm font-bold uppercase tracking-widest mb-6 backdrop-blur-sm">
                     Support & Inquiries
                 </span>
-                <h1 className="text-5xl md:text-7xl font-bold mb-6">Get in <span className="text-transparent bg-clip-text bg-gradient-brand">Touch</span></h1>
+                <h1 className="text-5xl md:text-7xl font-bold mb-6">Get in <span className="text-gradient-ocean">Touch</span></h1>
                 <p className="text-xl text-gray-300 max-w-xl mx-auto leading-relaxed">
                     Our support team is here to assist clinics and practitioners. Reach out to us for any questions.
                 </p>

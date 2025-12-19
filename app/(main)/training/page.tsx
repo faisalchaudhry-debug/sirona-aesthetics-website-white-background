@@ -18,7 +18,7 @@ export default function TrainingPage() {
                         </span>
                         <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white">
                             Master the Art of <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-brand">Bio-Remodeling</span>
+                            <span className="text-gradient-ocean">Bio-Remodeling</span>
                         </h1>
                         <p className="text-xl text-gray-300 mb-12 leading-relaxed max-w-2xl mx-auto">
                             Expert-led workshops and masterclasses designed for certified practitioners. Practical, clinical, and results-driven education to elevate your practice.

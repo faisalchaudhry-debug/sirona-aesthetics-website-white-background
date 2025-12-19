@@ -57,7 +57,7 @@ export default function ProductFilterBar({ currentCategory }: { currentCategory?
 
     return (
         <div className="sticky top-24 z-30 mb-12">
-            <div className="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-full p-2 shadow-xl shadow-gray-200/50 max-w-5xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-xl border border-gray-200 rounded-3xl md:rounded-full p-4 md:p-2 shadow-xl shadow-gray-200/50 max-w-5xl mx-auto overflow-hidden">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                     {/* Category Pills */}
                     <div className="flex space-x-1 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide px-2">
@@ -81,7 +81,7 @@ export default function ProductFilterBar({ currentCategory }: { currentCategory?
 
                     {/* Search Input */}
                     <div className="relative w-full md:w-72 pr-2">
-                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                         <input
                             type="text"
                             placeholder="Search products..."

@@ -41,7 +41,7 @@ export default async function BlogsPage() {
                         Knowledge Hub
                     </span>
                     <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                        Latest <span className="text-transparent bg-clip-text bg-gradient-brand">Insights</span>
+                        Latest <span className="text-gradient-ocean">Insights</span>
                     </h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
                         Expert articles, treatment protocols, and industry news for aesthetic professionals.

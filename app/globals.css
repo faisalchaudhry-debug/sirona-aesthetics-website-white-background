@@ -29,12 +29,21 @@ body {
 }
 
 @utility text-gradient {
-  @apply text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B9D] via-[#FF8E53] via-[#FFC837] via-[#4ADE80] to-[#3B82F6];
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-[#2D2654] to-[#C5A059];
+  /* Navy to Gold */
 }
 
 @utility bg-gradient-brand {
-  @apply bg-gradient-to-r from-[#FF6B9D] via-[#FF8E53] via-[#FFC837] via-[#4ADE80] to-[#3B82F6];
+  @apply bg-gradient-to-r from-[#2D2654] to-[#1A1433];
+  /* Sirona Navy Gradient */
 }
+
+@utility text-gradient-ocean {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-[#3B82F6] to-[#2DD4BF];
+  /* Sirona Blue-Teal Gradient */
+}
+
+
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
@@ -52,4 +61,17 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+@utility scrollbar-hide {
+  /* IE and Edge */
+  -ms-overflow-style: none;
+
+  /* Firefox */
+  scrollbar-width: none;
+
+  /* Safari and Chrome */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
