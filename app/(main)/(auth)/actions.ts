@@ -105,12 +105,19 @@ export async function updatePassword(formData: FormData) {
         return redirect('/reset-password?message=Passwords do not match')
     }
 
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+        return redirect('/reset-password?message=Session expired. Please request a new reset link.')
+    }
+
     const { error } = await supabase.auth.updateUser({
         password: password,
     })
 
     if (error) {
-        return redirect('/reset-password?message=Could not update password')
+        console.error('Password update error:', error.message)
+        return redirect(`/reset-password?message=${encodeURIComponent(error.message)}`)
     }
 
     return redirect('/dashboard')
