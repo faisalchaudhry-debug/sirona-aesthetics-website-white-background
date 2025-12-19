@@ -83,7 +83,7 @@ export default function ContactSection() {
                                 </div>
                                 <div>
                                     <h4 className="font-semibold text-lg">Call Us</h4>
-                                    <p className="text-gray-400">+44 123 456 7890</p>
+                                    <p className="text-gray-400">+44 7727 241711</p>
                                 </div>
                             </div>
 
