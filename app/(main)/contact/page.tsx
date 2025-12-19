@@ -41,9 +41,7 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="text-2xl font-bold mb-3 text-white">Headquarters</h3>
                                         <p className="text-gray-400 leading-relaxed text-lg">
-                                            Sirona Aesthetics HQ<br />
-                                            Business Bay, Building 4<br />
-                                            Dubai, United Arab Emirates
+                                            London, United Kingdom
                                         </p>
                                     </div>
                                 </div>
@@ -72,8 +70,8 @@ export default function ContactPage() {
                                     <div>
                                         <h3 className="text-2xl font-bold mb-3 text-white">Call Us</h3>
                                         <p className="text-gray-400 mb-4">Mon-Fri from 9am to 6pm.</p>
-                                        <a href="tel:+971500000000" className="text-xl font-bold text-white hover:text-green-400 transition-colors flex items-center">
-                                            +971 50 000 0000 <ArrowRight className="ml-2 w-5 h-5" />
+                                        <a href="tel:+441234567890" className="text-xl font-bold text-white hover:text-green-400 transition-colors flex items-center">
+                                            +44 123 456 7890 <ArrowRight className="ml-2 w-5 h-5" />
                                         </a>
                                     </div>
                                 </div>

@@ -10,7 +10,7 @@ export default async function ForgotPasswordPage({
     const { message } = await searchParams
 
     return (
-        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
+        <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 pt-16 md:pt-20">
             {/* Left Side - Image */}
             <div className="hidden md:block relative bg-gray-900">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/90 to-black/60 z-10" />
