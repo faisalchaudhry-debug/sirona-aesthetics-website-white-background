@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createAdminClient } from '@/utils/supabase/admin'
 import { Check, Star, Trash2 } from 'lucide-react'
 import { approveReview, deleteReview } from './actions'
 import { revalidatePath } from 'next/cache'
@@ -6,18 +6,54 @@ import { revalidatePath } from 'next/cache'
 export const revalidate = 0
 
 export default async function AdminReviewsPage() {
-    const supabase = await createClient()
+    let supabase;
+    try {
+        supabase = createAdminClient()
+    } catch (error) {
+        console.error('Failed to create admin client:', error)
+        return (
+            <div className="space-y-6">
+                <h1 className="text-2xl font-bold text-gray-800">Review Management</h1>
+                <div className="bg-red-50 rounded-xl shadow-sm border border-red-200 p-12 text-center">
+                    <p className="text-red-600 font-medium text-lg">Error: Failed to connect to database.</p>
+                    <p className="text-red-400 text-sm mt-2">Please check SUPABASE_SERVICE_ROLE_KEY is set in .env.local</p>
+                </div>
+            </div>
+        )
+    }
 
-    const { data: reviews } = await supabase
+    const { data: reviews, error } = await supabase
         .from('product_reviews')
         .select(`
             *,
-            products:product_id (name, slug),
-            profiles:user_id (email, full_name)
+            products:product_id (name, slug)
         `)
         .order('created_at', { ascending: false })
 
-    if (!reviews || reviews.length === 0) {
+    if (error) {
+        console.error('Error fetching reviews:', error)
+    }
+
+    // Fetch profiles for each review's user_id
+    let reviewsWithProfiles = reviews || []
+    if (reviews && reviews.length > 0) {
+        const userIds = [...new Set(reviews.map(r => r.user_id))]
+        const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, email, full_name')
+            .in('id', userIds)
+
+        // Map profiles to reviews
+        const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
+        reviewsWithProfiles = reviews.map(review => ({
+            ...review,
+            profiles: profileMap.get(review.user_id) || null
+        }))
+    }
+
+    console.log('Reviews fetched:', reviewsWithProfiles.length, 'reviews')
+
+    if (reviewsWithProfiles.length === 0) {
         return (
             <div className="space-y-6">
                 <h1 className="text-2xl font-bold text-gray-800">Review Management</h1>
@@ -46,7 +82,7 @@ export default async function AdminReviewsPage() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {reviews.map((review) => (
+                        {reviewsWithProfiles.map((review) => (
                             <tr key={review.id} className="hover:bg-gray-50 transition-colors">
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="text-sm font-medium text-gray-900">{review.products?.name || 'Unknown Product'}</div>

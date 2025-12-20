@@ -4,20 +4,34 @@ import { Star, User } from 'lucide-react'
 export default async function ReviewList({ productId }: { productId: string }) {
     const supabase = await createClient()
 
-    const { data: reviews } = await supabase
+    const { data: reviews, error } = await supabase
         .from('product_reviews')
-        .select(`
-            *,
-            profiles:user_id (
-                full_name,
-                company_name
-            )
-        `)
+        .select('*')
         .eq('product_id', productId)
         .eq('is_approved', true)
         .order('created_at', { ascending: false })
 
-    if (!reviews || reviews.length === 0) {
+    if (error) {
+        console.error('Error fetching reviews:', error)
+    }
+
+    // Fetch profiles for the review authors
+    let reviewsWithProfiles = reviews || []
+    if (reviews && reviews.length > 0) {
+        const userIds = [...new Set(reviews.map(r => r.user_id))]
+        const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, full_name, company_name')
+            .in('id', userIds)
+
+        const profileMap = new Map(profiles?.map(p => [p.id, p]) || [])
+        reviewsWithProfiles = reviews.map(review => ({
+            ...review,
+            profiles: profileMap.get(review.user_id) || null
+        }))
+    }
+
+    if (reviewsWithProfiles.length === 0) {
         return (
             <div className="text-center py-12 bg-gray-50 rounded-2xl">
                 <Star className="w-12 h-12 text-gray-300 mx-auto mb-4" />
@@ -27,7 +41,7 @@ export default async function ReviewList({ productId }: { productId: string }) {
         )
     }
 
-    const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+    const averageRating = reviewsWithProfiles.reduce((acc, review) => acc + review.rating, 0) / reviewsWithProfiles.length
 
     return (
         <div className="space-y-8">
@@ -39,18 +53,18 @@ export default async function ReviewList({ productId }: { productId: string }) {
                             <Star
                                 key={star}
                                 className={`w-5 h-5 ${star <= Math.round(averageRating)
-                                        ? 'fill-yellow-400 text-yellow-400'
-                                        : 'text-gray-300'
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-gray-300'
                                     }`}
                             />
                         ))}
                     </div>
-                    <p className="text-sm text-gray-500">{reviews.length} Reviews</p>
+                    <p className="text-sm text-gray-500">{reviewsWithProfiles.length} Reviews</p>
                 </div>
             </div>
 
             <div className="space-y-6">
-                {reviews.map((review) => (
+                {reviewsWithProfiles.map((review) => (
                     <div key={review.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                         <div className="flex justify-between items-start mb-4">
                             <div className="flex items-center">
@@ -71,8 +85,8 @@ export default async function ReviewList({ productId }: { productId: string }) {
                                     <Star
                                         key={star}
                                         className={`w-4 h-4 ${star <= review.rating
-                                                ? 'fill-yellow-400 text-yellow-400'
-                                                : 'text-gray-300'
+                                            ? 'fill-yellow-400 text-yellow-400'
+                                            : 'text-gray-300'
                                             }`}
                                     />
                                 ))}
