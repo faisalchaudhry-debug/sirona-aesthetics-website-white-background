@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Check, Shield, Truck } from 'lucide-react'
+import { ArrowLeft, Shield, Truck } from 'lucide-react'
 import AddToCartButton from '@/components/AddToCartButton'
 import RelatedProducts from '@/components/RelatedProducts'
 import ProductEducation from '@/components/ProductEducation'
@@ -29,7 +29,6 @@ export default async function ProductPage({
     }
 
     let showPrice = false
-    let isPending = false
 
     if (user) {
         const { data: profile } = await supabase
@@ -42,7 +41,8 @@ export default async function ProductPage({
             if ((profile.role === 'doctor' || profile.role === 'admin') && profile.is_approved) {
                 showPrice = true
             } else if ((profile.role === 'doctor' || profile.role === 'user') && !profile.is_approved) {
-                isPending = true
+                // Redirect unapproved users to the account pending page
+                redirect('/account-pending')
             }
         }
     }
@@ -84,7 +84,7 @@ export default async function ProductPage({
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 overflow-hidden">
                     {/* Left Column: Gallery (Sticky on Desktop) */}
                     <div className="lg:col-span-7">
                         <div className="sticky top-32">
@@ -129,16 +129,6 @@ export default async function ProductPage({
                                         </div>
                                     </div>
                                 </div>
-                            ) : isPending ? (
-                                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-6">
-                                    <div className="flex items-center mb-3">
-                                        <Truck className="w-5 h-5 text-yellow-600 mr-2" />
-                                        <p className="font-bold text-lg text-yellow-800">Account Pending Approval</p>
-                                    </div>
-                                    <p className="text-yellow-700 text-sm leading-relaxed">
-                                        Your account is currently under review. Once approved, you will have specific pricing access.
-                                    </p>
-                                </div>
                             ) : (
                                 <div className="bg-[#1A1433] rounded-2xl p-8 text-white shadow-xl shadow-[#1A1433]/10 relative overflow-hidden group">
                                     <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-2xl -mr-16 -mt-16 transition-all group-hover:bg-accent/20"></div>
@@ -150,7 +140,7 @@ export default async function ProductPage({
                                             </div>
                                             <div>
                                                 <p className="font-bold text-lg">Professional Pricing</p>
-                                                <p className="text-white/60 text-xs">Verified Acess Only</p>
+                                                <p className="text-white/60 text-xs">Verified Access Only</p>
                                             </div>
                                         </div>
                                         <p className="text-gray-300 text-sm mb-6 leading-relaxed border-t border-white/10 pt-4">
