@@ -162,7 +162,7 @@ export default function NavbarClient({ children, user }: NavbarClientProps) {
                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="fixed inset-0 bg-white z-40 lg:hidden pt-24 px-6 h-screen flex flex-col"
+                        className="fixed inset-0 bg-white z-40 lg:hidden pt-24 px-6 pb-24 h-screen flex flex-col overflow-y-auto"
                     >
                         <div className="flex flex-col space-y-6 items-start w-full max-w-md mx-auto">
                             {navLinks.map((link, index) => (
