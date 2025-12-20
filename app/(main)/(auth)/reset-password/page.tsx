@@ -28,8 +28,21 @@ function ResetPasswordContent() {
             console.log('=== Reset Password Page Loaded ===')
             console.log('Token present:', !!token)
             console.log('Type:', type)
+            console.log('Message:', message)
 
-            // If we have a token and type, verify it
+            // Check if there's already a valid session (from auth callback flow)
+            // The auth callback should have already exchanged the code for a session
+            const { data: { session } } = await supabase.auth.getSession()
+            console.log('Existing session check:', !!session)
+
+            if (session) {
+                setIsSessionReady(true)
+                setCheckingSession(false)
+                return
+            }
+
+            // If we have a token and type=recovery, try to verify it directly
+            // This is a fallback in case someone comes directly with a token
             if (token && type === 'recovery') {
                 console.log('Verifying recovery token...')
 
@@ -59,12 +72,10 @@ function ResetPasswordContent() {
                 }
             }
 
-            // Check if there's already a valid session (from auth callback flow)
-            const { data: { session } } = await supabase.auth.getSession()
-            console.log('Existing session check:', !!session)
-
-            if (session) {
-                setIsSessionReady(true)
+            // If we still don't have a session and there's a PKCE token, it might be an old link format
+            // Show appropriate error
+            if (token && token.startsWith('pkce_')) {
+                setError('This reset link has an outdated format. Please request a new password reset link.')
             }
 
             setCheckingSession(false)
@@ -89,7 +100,7 @@ function ResetPasswordContent() {
         return () => {
             subscription.unsubscribe()
         }
-    }, [token, type])
+    }, [token, type, message])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
