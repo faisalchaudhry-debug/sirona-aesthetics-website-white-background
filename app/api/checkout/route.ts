@@ -38,7 +38,10 @@ export async function POST(request: Request) {
             .single()
 
         // 1. Calculate Total Amount
-        const totalAmount = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
+        const subtotal = items.reduce((sum: number, item: any) => sum + (item.price * item.quantity), 0)
+        const vatAmount = subtotal * 0.20
+        const shippingCost = 7.50
+        const totalAmount = subtotal + vatAmount + shippingCost
 
         // 2. Create Order in Pending Status
         const { data: order, error: orderError } = await supabase
@@ -73,10 +76,35 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Failed to create order items' }, { status: 500 })
         }
 
+        // Add VAT and Shipping to line items for Stripe
+        const finalLineItems = [
+            ...lineItems,
+            {
+                price_data: {
+                    currency: 'gbp',
+                    product_data: {
+                        name: 'VAT (20%)',
+                    },
+                    unit_amount: Math.round(vatAmount * 100),
+                },
+                quantity: 1,
+            },
+            {
+                price_data: {
+                    currency: 'gbp',
+                    product_data: {
+                        name: 'Postage and Packing',
+                    },
+                    unit_amount: Math.round(shippingCost * 100),
+                },
+                quantity: 1,
+            }
+        ]
+
         // 4. Create Stripe Session with Order ID
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
-            line_items: lineItems,
+            line_items: finalLineItems,
             mode: 'payment',
             success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/cancel`,

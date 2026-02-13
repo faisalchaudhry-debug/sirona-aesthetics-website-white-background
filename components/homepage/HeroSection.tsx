@@ -16,8 +16,8 @@ export default function HeroSection() {
     const slides = [
         {
             id: 1,
-            title: "The Science of Bio-Remodeling",
-            subtitle: "Exclusive distributor of recombinant enzymes and tissue engineering solutions",
+            title: "The science of regenerative medical aesthetics",
+            subtitle: "Exclusive UK distributor of unique biotechnology from small, clever biotechs",
             cta: "View Products",
             link: "/products",
             // Using a gradient background as fallback/placeholder for video
@@ -26,18 +26,35 @@ export default function HeroSection() {
         },
         {
             id: 2,
-            title: "PB Serum™ - Recombinant Innovation",
+            title: "pbserum - recombinant enzyme technology.",
             subtitle: "The versatility of advanced enzymes for targeted aesthetic treatments",
-            cta: "Discover PB Serum",
+            cta: "Discover pbserum",
             link: "/products?brand=pbserum",
             bgClass: "bg-gradient-to-br from-[#2D2654] to-[#1e3a8a]",
             video: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/lh9pi7lnm6g_1766163058367.mp4"
         },
         {
             id: 3,
+            title: "Novacutan™",
+            subtitle: "Novacutan BioPro is the worlds only Matrix Biomodulator.",
+            cta: "Discover Novacutan",
+            link: "/products?brand=novacutan",
+            bgClass: "bg-gradient-to-br from-[#2D2654] to-[#1A1433]",
+            image: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/dzi9w2m4hgr_1771001864407.jpg"
+        },
+        {
+            id: 4,
+            title: "UK Responsible Person (UKRP)",
+            subtitle: "Comprehensive regulatory compliance services for international aesthetic brands entering the UK market.",
+            cta: "Learn More",
+            link: "/ukrp",
+            bgClass: "bg-gradient-to-br from-[#064e3b] to-[#0f172a]"
+        },
+        {
+            id: 5,
             title: "Professional Training Academy",
-            subtitle: "Expert-led workshops and certification in enzymatic therapy",
-            cta: "Join Academy",
+            subtitle: "Expert led clinical workshops and webinars in the latest regenerative technologies",
+            cta: "Learn with us",
             link: "/training",
             bgClass: "bg-gradient-to-br from-[#0f172a] to-[#3A3366]",
             image: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/vikk3r06c2_1766162482858.webp"

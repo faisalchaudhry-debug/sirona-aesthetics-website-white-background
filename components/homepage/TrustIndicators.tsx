@@ -8,15 +8,15 @@ export default function TrustIndicators() {
             id: 1,
             icon: <Activity className="w-8 h-8 text-accent" />,
             value: "100%",
-            label: "Authentic Enzymes",
+            label: "Authentic products",
             description: "Direct from manufacturer"
         },
         {
             id: 2,
             icon: <Globe className="w-8 h-8 text-accent" />,
             value: "Global",
-            label: "Distribution Network",
-            description: "Serving clinics worldwide"
+            label: "Manufacturers",
+            description: "(we only distribute in the UK)"
         },
         {
             id: 3,

@@ -195,9 +195,23 @@ export default function CheckoutForm({ userProfile }: { userProfile: Profile }) 
                                 <span className="font-medium text-gray-900">£{(item.price * item.quantity).toFixed(2)}</span>
                             </div>
                         ))}
-                        <div className="border-t pt-4 flex justify-between items-center font-bold text-lg text-gray-900">
-                            <span>Total</span>
-                            <span>£{cartTotal.toFixed(2)}</span>
+                        <div className="border-t pt-4 space-y-2">
+                            <div className="flex justify-between items-center text-sm text-gray-600">
+                                <span>Subtotal</span>
+                                <span>£{cartTotal.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm text-gray-600">
+                                <span>VAT (20%)</span>
+                                <span>£{(cartTotal * 0.20).toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm text-gray-600">
+                                <span>Postage and Packing</span>
+                                <span>£7.50</span>
+                            </div>
+                            <div className="flex justify-between items-center font-bold text-lg text-gray-900 pt-2 border-t">
+                                <span>Total</span>
+                                <span>£{(cartTotal + (cartTotal * 0.20) + 7.50).toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

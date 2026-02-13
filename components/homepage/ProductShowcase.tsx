@@ -7,9 +7,9 @@ export default function ProductShowcase() {
     const products = [
         {
             id: "pbserum",
-            name: "PB Serum™",
+            name: "pbserum",
             description: "The versatility of recombinant enzymes for targeted treatments",
-            detail: "Three enzymes. Infinite possibilities. Treat fibrosis, scars, and localized fat with precision.",
+            detail: "It is 6 enzymes - infinite possibilities. Treat fibrosis, scars, and localized fat with precision.",
             image: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/m2g0mlzca6l_1765985406595.png", // Using existing image URL
             bg: "bg-[#3A3366]",
             gradient: "from-[#3A3366] to-[#2D2654]",
@@ -18,9 +18,9 @@ export default function ProductShowcase() {
         {
             id: "novacutan",
             name: "Novacutan™",
-            description: "Exo-protection technology targeting skin aging from an environmental level",
-            detail: "Protects against UV, HEV, and environmental pollutants while restoring skin youth.",
-            image: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/esxjq61117w_1765985399210.png",
+            description: "Novacutan BioPro is the worlds only Matrix Biomodulator.",
+            detail: "This unique product stimulates renewal and suppresses inflammation in the skin at 3 levels : Extra cellular, cellular and subcellular levels. A range of dual action - highly innovative fillers brings skin boosting effects with precision",
+            image: "https://xkcgalcdpspqximzoxzy.supabase.co/storage/v1/object/public/media/dzi9w2m4hgr_1771001864407.jpg",
             bg: "bg-[#2D2654]",
             gradient: "from-[#2D2654] to-[#1A1433]",
             align: "right"
@@ -42,7 +42,7 @@ export default function ProductShowcase() {
             <div className="container-custom mb-20 text-center relative z-10">
                 <h2 className="text-4xl md:text-6xl font-bold text-sirona-navy mb-6">Our <span className="text-gradient">Portfolio</span></h2>
                 <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-                    Curated solutions for fibrosis, localized fat reduction, and rejuvenation.
+                    Curated solutions for scars, fibrosis, localized fat reduction, and rejuvenation.
                 </p>
             </div>
 

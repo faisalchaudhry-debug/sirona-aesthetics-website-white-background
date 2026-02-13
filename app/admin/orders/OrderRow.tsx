@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, FileText, Package } from 'lucide-react'
 import OrderStatusSelect from './OrderStatusSelect'
+import { generateInvoicePDFAsync, generatePackingSlipPDFAsync } from '@/utils/pdf-generator'
 
 interface OrderRowProps {
     order: any
@@ -101,7 +102,25 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
                 <tr className="bg-gray-50/80">
                     <td colSpan={8} className="px-6 py-4">
                         <div className="ml-4 pl-4 border-l-2 border-purple-200">
-                            <p className="text-sm font-medium text-gray-600 mb-2">Order Items:</p>
+                            <div className="flex justify-between items-center mb-4">
+                                <p className="text-sm font-medium text-gray-600">Order Items:</p>
+                                <div className="flex space-x-2">
+                                    <button
+                                        onClick={() => generateInvoicePDFAsync(order, profile)}
+                                        className="flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-100 rounded-md hover:bg-purple-200 transition-colors"
+                                    >
+                                        <FileText className="w-3.5 h-3.5 mr-1.5" />
+                                        Invoice
+                                    </button>
+                                    <button
+                                        onClick={() => generatePackingSlipPDFAsync(order, profile)}
+                                        className="flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
+                                    >
+                                        <Package className="w-3.5 h-3.5 mr-1.5" />
+                                        Packing Slip
+                                    </button>
+                                </div>
+                            </div>
                             <ul className="space-y-1.5">
                                 {order.order_items?.map((item: any, idx: number) => (
                                     <li key={idx} className="text-sm text-gray-700 flex items-center">
