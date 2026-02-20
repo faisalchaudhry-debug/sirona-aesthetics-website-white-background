@@ -247,6 +247,12 @@ export default async function VeluriaPage() {
                     image_url: getProductImage(p) || "",
                   }))}
                 />
+                <Link
+                  href="/veluria/bundle"
+                  className="text-center text-xs font-semibold text-[#C9A84C]/60 hover:text-[#C9A84C] transition-colors uppercase tracking-widest mt-1"
+                >
+                  View Bundle Page →
+                </Link>
               </div>
 
             </div>
