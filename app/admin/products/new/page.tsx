@@ -1,9 +1,16 @@
+import { createClient } from '@/utils/supabase/server'
 import ProductForm from '@/components/admin/ProductForm'
 
-export default function NewProductPage() {
+export default async function NewProductPage() {
+    const supabase = await createClient()
+    const { data: categories } = await supabase
+        .from('categories')
+        .select('name, slug')
+        .order('name', { ascending: true })
+
     return (
         <div className="max-w-2xl mx-auto space-y-8">
-            <ProductForm />
+            <ProductForm categories={categories || []} />
         </div>
     )
 }

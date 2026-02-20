@@ -22,20 +22,38 @@ function useDebounce<T>(value: T, delay: number): T {
     return debouncedValue
 }
 
+interface CategoryOption {
+    slug: string
+    name: string
+}
+
 interface Category {
     id: string
     name: string
     href: string
 }
 
-const CATEGORIES: Category[] = [
-    { id: 'all', name: 'All Products', href: '/products' },
+const FALLBACK_CATEGORIES: Category[] = [
     { id: 'pb-serum', name: 'PB Serum', href: '/products?category=pb-serum' },
     { id: 'novacutan', name: 'Novacutan', href: '/products?category=novacutan' },
     { id: 'smartker', name: 'Smartker', href: '/products?category=smartker' },
 ]
 
-export default function ProductFilterBar({ currentCategory }: { currentCategory?: string }) {
+export default function ProductFilterBar({
+    currentCategory,
+    categories,
+}: {
+    currentCategory?: string
+    categories?: CategoryOption[]
+}) {
+    const builtCategories: Category[] = categories && categories.length > 0
+        ? categories.map(c => ({ id: c.slug, name: c.name, href: `/products?category=${c.slug}` }))
+        : FALLBACK_CATEGORIES
+
+    const CATEGORIES: Category[] = [
+        { id: 'all', name: 'All Products', href: '/products' },
+        ...builtCategories,
+    ]
     const router = useRouter()
     const searchParams = useSearchParams()
 

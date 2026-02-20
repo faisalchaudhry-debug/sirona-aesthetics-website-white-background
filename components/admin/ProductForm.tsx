@@ -27,7 +27,12 @@ type Product = {
     product_media?: ProductMedia[]
 }
 
-export default function ProductForm({ product }: { product?: Product }) {
+interface CategoryOption {
+    name: string
+    slug: string
+}
+
+export default function ProductForm({ product, categories = [] }: { product?: Product; categories?: CategoryOption[] }) {
     const router = useRouter()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [galleryPreviews, setGalleryPreviews] = useState<string[]>([])
@@ -133,22 +138,23 @@ export default function ProductForm({ product }: { product?: Product }) {
                         <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Basic Information</h3>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                            <input type="text" name="name" defaultValue={product?.name} required className="w-full px-4 py-2 border rounded-lg" />
+                            <input suppressHydrationWarning type="text" name="name" defaultValue={product?.name} required className="w-full px-4 py-2 border rounded-lg" />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
-                                <input type="number" name="price" step="0.01" defaultValue={product?.price} required className="w-full px-4 py-2 border rounded-lg" />
+                                <input suppressHydrationWarning type="number" name="price" step="0.01" defaultValue={product?.price} required className="w-full px-4 py-2 border rounded-lg" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Sale Price</label>
-                                <input type="number" name="sale_price" step="0.01" defaultValue={product?.sale_price ?? ''} className="w-full px-4 py-2 border rounded-lg" />
+                                <input suppressHydrationWarning type="number" name="sale_price" step="0.01" defaultValue={product?.sale_price ?? ''} className="w-full px-4 py-2 border rounded-lg" />
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                 <select
+                                    suppressHydrationWarning
                                     name="is_active"
                                     defaultValue={product?.is_active ? 'true' : 'false'}
                                     className="w-full px-4 py-2 border rounded-lg bg-white"
@@ -159,14 +165,17 @@ export default function ProductForm({ product }: { product?: Product }) {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
-                                <input type="number" name="stock" defaultValue={product?.stock ?? 0} required className="w-full px-4 py-2 border rounded-lg" />
+                                <input suppressHydrationWarning type="number" name="stock" defaultValue={product?.stock ?? 0} required className="w-full px-4 py-2 border rounded-lg" />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-                                <select name="category" defaultValue={product?.category ?? 'pb-serum'} className="w-full px-4 py-2 border rounded-lg bg-white">
-                                    <option value="pb-serum">PB Serum</option>
-                                    <option value="novacutan">Novacutan</option>
-                                    <option value="smartker">Smartker</option>
+                                <select suppressHydrationWarning name="category" defaultValue={product?.category ?? categories[0]?.slug ?? ''} className="w-full px-4 py-2 border rounded-lg bg-white">
+                                    {categories.length === 0 && (
+                                        <option value="">No categories — add one first</option>
+                                    )}
+                                    {categories.map(cat => (
+                                        <option key={cat.slug} value={cat.slug}>{cat.name}</option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
@@ -177,15 +186,15 @@ export default function ProductForm({ product }: { product?: Product }) {
                         <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Descriptions</h3>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Summary</label>
-                            <textarea name="description" rows={2} defaultValue={product?.description} className="w-full px-4 py-2 border rounded-lg" />
+                            <textarea suppressHydrationWarning name="description" rows={2} defaultValue={product?.description} className="w-full px-4 py-2 border rounded-lg" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Short Description (Highlight)</label>
-                            <input type="text" name="short_description" defaultValue={product?.short_description} className="w-full px-4 py-2 border rounded-lg" />
+                            <input suppressHydrationWarning type="text" name="short_description" defaultValue={product?.short_description} className="w-full px-4 py-2 border rounded-lg" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Long Description</label>
-                            <textarea name="long_description" rows={6} defaultValue={product?.long_description} className="w-full px-4 py-2 border rounded-lg" />
+                            <textarea suppressHydrationWarning name="long_description" rows={6} defaultValue={product?.long_description} className="w-full px-4 py-2 border rounded-lg" />
                         </div>
                     </div>
 

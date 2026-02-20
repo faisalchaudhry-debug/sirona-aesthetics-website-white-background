@@ -36,11 +36,11 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
     // Fetch Profiles for Customer Info (manual join)
     let ordersWithProfiles: any[] = []
     if (orders && orders.length > 0) {
-        const userIds = orders.map(o => o.user_id)
+        const userIds = orders.map(o => o.user_id).filter(Boolean)
         const { data: profiles } = await supabase
             .from('profiles')
             .select('id, full_name, email')
-            .in('id', userIds)
+            .in('id', userIds.length > 0 ? userIds : ['00000000-0000-0000-0000-000000000000'])
 
         ordersWithProfiles = orders.map(order => ({
             ...order,

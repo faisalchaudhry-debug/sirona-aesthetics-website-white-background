@@ -48,8 +48,11 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
                 {/* CUSTOMER */}
                 <td className="px-4 py-4">
                     <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">{profile?.full_name || 'Unknown'}</span>
-                        <span className="text-xs text-gray-400">{profile?.email || 'N/A'}</span>
+                        <span className="font-medium text-gray-900">{profile?.full_name || order.guest_name || 'Unknown'}</span>
+                        <span className="text-xs text-gray-400">{profile?.email || order.guest_email || 'N/A'}</span>
+                        {!profile && order.guest_name && (
+                            <span className="text-[10px] text-amber-500 font-semibold uppercase tracking-wider mt-0.5">Guest</span>
+                        )}
                     </div>
                 </td>
 
@@ -106,14 +109,14 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
                                 <p className="text-sm font-medium text-gray-600">Order Items:</p>
                                 <div className="flex space-x-2">
                                     <button
-                                        onClick={() => generateInvoicePDFAsync(order, profile)}
+                                        onClick={() => generateInvoicePDFAsync(order, profile ?? { full_name: order.guest_name || 'Guest', email: order.guest_email || '' })}
                                         className="flex items-center px-3 py-1.5 text-xs font-medium text-purple-700 bg-purple-100 rounded-md hover:bg-purple-200 transition-colors"
                                     >
                                         <FileText className="w-3.5 h-3.5 mr-1.5" />
                                         Invoice
                                     </button>
                                     <button
-                                        onClick={() => generatePackingSlipPDFAsync(order, profile)}
+                                        onClick={() => generatePackingSlipPDFAsync(order, profile ?? { full_name: order.guest_name || 'Guest', email: order.guest_email || '' })}
                                         className="flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-100 rounded-md hover:bg-blue-200 transition-colors"
                                     >
                                         <Package className="w-3.5 h-3.5 mr-1.5" />

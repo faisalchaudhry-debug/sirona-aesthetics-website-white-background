@@ -20,7 +20,17 @@ interface CartContextType {
     cartCount: number
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined)
+const defaultCartContext: CartContextType = {
+    items: [],
+    addItem: () => {},
+    removeItem: () => {},
+    updateQuantity: () => {},
+    clearCart: () => {},
+    cartTotal: 0,
+    cartCount: 0,
+}
+
+const CartContext = createContext<CartContextType>(defaultCartContext)
 
 export function CartProvider({ children }: { children: ReactNode }) {
     console.log('CartProvider mounting')
@@ -95,9 +105,5 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 export function useCart() {
-    const context = useContext(CartContext)
-    if (context === undefined) {
-        throw new Error('useCart must be used within a CartProvider')
-    }
-    return context
+    return useContext(CartContext)
 }

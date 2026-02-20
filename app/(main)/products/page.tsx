@@ -14,6 +14,12 @@ export default async function ProductsPage({
     const { category, search } = await searchParams
     const supabase = await createClient()
 
+    // Fetch categories for the filter bar
+    const { data: categories } = await supabase
+        .from('categories')
+        .select('name, slug')
+        .order('name', { ascending: true })
+
     // Check user role
     const { data: { user } } = await supabase.auth.getUser()
     let showPrice = false
@@ -89,7 +95,7 @@ export default async function ProductsPage({
 
             <div className="container-custom py-20 relative z-10">
                 {/* Filters & Controls */}
-                <ProductFilterBar currentCategory={category} />
+                <ProductFilterBar currentCategory={category} categories={categories || []} />
 
                 {/* Product Grid */}
                 {products && products.length > 0 ? (
