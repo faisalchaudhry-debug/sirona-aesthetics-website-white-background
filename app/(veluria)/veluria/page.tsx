@@ -4,7 +4,6 @@ import Link from "next/link"
 import { ArrowLeft, ExternalLink, Sparkles, Zap, Droplets, Shield, Tag, Package } from "lucide-react"
 import VeluriaAddToCartButton from "@/components/VeluriaAddToCartButton"
 import VeluriaCartHeaderButton from "@/components/VeluriaCartHeaderButton"
-import VeluriaBundleButton from "@/components/VeluriaBundleButton"
 
 export const revalidate = 0
 
@@ -239,19 +238,13 @@ export default async function VeluriaPage() {
                     : " One price for the complete professional range."}
                 </p>
 
-                <VeluriaBundleButton
-                  products={veluriaProducts.map(p => ({
-                    id: p.id,
-                    name: p.name,
-                    price: p.price,
-                    image_url: getProductImage(p) || "",
-                  }))}
-                />
                 <Link
                   href="/veluria/bundle"
-                  className="text-center text-xs font-semibold text-[#C9A84C]/60 hover:text-[#C9A84C] transition-colors uppercase tracking-widest mt-1"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-full text-sm font-bold uppercase tracking-widest transition-all duration-300 hover:opacity-90"
+                  style={{ background: "linear-gradient(135deg, #C9A84C, #F5D98B)", color: "#0E0B1F" }}
                 >
-                  View Bundle Page →
+                  <Package className="w-4 h-4" />
+                  Get the Bundle — £350
                 </Link>
               </div>
 
