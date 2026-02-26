@@ -11,6 +11,7 @@ interface OrderStatusSelectProps {
 }
 
 const STATUS_OPTIONS = [
+    { value: 'injectable_review', label: 'Injectable Review' },
     { value: 'pending', label: 'Pending' },
     { value: 'paid', label: 'Paid' },
     { value: 'shipped', label: 'Shipped' },

@@ -14,6 +14,7 @@ export async function registerWebinar(prevState: WebinarFormState, formData: For
 
     const name = formData.get('name') as string
     const email = formData.get('email') as string
+    const phone = formData.get('phone') as string
     const clinic = formData.get('clinic') as string
     const message = formData.get('message') as string
 
@@ -26,6 +27,7 @@ export async function registerWebinar(prevState: WebinarFormState, formData: For
         .insert({
             full_name: name,
             email: email,
+            phone: phone || null,
             clinic_name: clinic,
             message: message,
         })

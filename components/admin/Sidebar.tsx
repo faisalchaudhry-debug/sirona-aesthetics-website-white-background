@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Users, ShoppingBag, ShoppingCart, LogOut, Package, Image as ImageIcon, FileText, Star, Calendar, X, Tag } from 'lucide-react'
+import { LayoutDashboard, Users, UserCheck, ShoppingBag, ShoppingCart, LogOut, Package, Image as ImageIcon, FileText, Star, Calendar, X, Tag, Video } from 'lucide-react'
 import { logout } from '@/app/(main)/(auth)/actions'
 
 interface AdminSidebarProps {
@@ -17,10 +17,12 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     const navItems = [
         { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
         { name: 'Users', href: '/admin/users', icon: Users },
+        { name: 'Guests', href: '/admin/guests', icon: UserCheck },
         { name: 'Products', href: '/admin/products', icon: Package },
         { name: 'Categories', href: '/admin/categories', icon: Tag },
         { name: 'Orders', href: '/admin/orders', icon: ShoppingBag },
         { name: 'Reviews', href: '/admin/reviews', icon: Star },
+        { name: 'Webinars', href: '/admin/webinars', icon: Video },
         { name: 'Blogs', href: '/admin/blogs', icon: FileText },
         { name: 'Contact Forms', href: '/admin/contact-submissions', icon: FileText },
         { name: 'Media', href: '/admin/media', icon: ImageIcon },

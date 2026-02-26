@@ -1,8 +1,64 @@
 import { Microscope, Hand, Award, Calendar, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import WebinarForm from './WebinarForm'
+import { createClient } from '@/utils/supabase/server'
 
-export default function TrainingPage() {
+export const revalidate = 0
+
+interface TrainingEvent {
+    id: string
+    title: string
+    event_date: string
+    description: string
+}
+
+function EventCard({ event }: { event: TrainingEvent }) {
+    const eventDate = new Date(event.event_date)
+    return (
+        <div className="bg-[#1A1433] border border-white/10 rounded-3xl p-10 relative overflow-hidden">
+            {/* Gradient top border accent */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-brand" />
+            <div className="relative z-10">
+                <h3 className="text-2xl font-bold text-white mb-4">{event.title}</h3>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-accent font-semibold mb-6">
+                    <Calendar className="w-4 h-4" />
+                    <span>
+                        {eventDate.toLocaleDateString('en-GB', {
+                            timeZone: 'UTC',
+                            weekday: 'long',
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        })}
+                    </span>
+                    <span className="text-white/30">·</span>
+                    <span className="text-white/60 font-normal text-sm">
+                        {eventDate.toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' })}
+                        {' '}GMT
+                    </span>
+                </div>
+                <p className="text-gray-300 leading-relaxed">{event.description}</p>
+                <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent/70 uppercase tracking-widest bg-accent/10 px-4 py-2 rounded-full">
+                    Online Event
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default async function TrainingPage() {
+    const supabase = await createClient()
+
+    // Fetch the nearest upcoming event
+    const { data: upcomingEvents } = await supabase
+        .from('training_events')
+        .select('*')
+        .gte('event_date', new Date().toISOString())
+        .order('event_date', { ascending: true })
+        .limit(1)
+
+    const nextEvent: TrainingEvent | null = upcomingEvents?.[0] ?? null
+
     return (
         <div className="bg-[#2D2654] min-h-screen font-sans selection:bg-accent selection:text-white">
             {/* Hero Section */}
@@ -25,7 +81,7 @@ export default function TrainingPage() {
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 justify-center">
                             <a href="#register" className="inline-flex justify-center items-center px-10 py-4 bg-gradient-brand text-white font-bold rounded-full transition-all shadow-[0_0_30px_rgba(255,107,157,0.4)] hover:shadow-[0_0_50px_rgba(255,107,157,0.6)] hover:scale-105">
-                                Register Interest
+                                {nextEvent ? 'Register Now' : 'Register Interest'}
                             </a>
                             <Link href="/contact" className="inline-flex justify-center items-center px-10 py-4 bg-white/5 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all">
                                 Contact Us
@@ -83,12 +139,12 @@ export default function TrainingPage() {
 
             {/* Upcoming Sessions & Form Section */}
             <section id="register" className="py-24 relative overflow-hidden">
-                {/* Decorative Elements */}
                 <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
                 <div className="container-custom relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-                        {/* Left Column: Upcoming Sessions */}
+
+                        {/* Left Column: Event card or empty state */}
                         <div>
                             <div className="flex items-center gap-4 mb-8">
                                 <span className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center border border-white/10">
@@ -99,17 +155,21 @@ export default function TrainingPage() {
                                 </h2>
                             </div>
 
-                            <div className="bg-[#1A1433] border border-white/10 rounded-3xl p-10 text-center relative overflow-hidden">
-                                <div className="relative z-10">
-                                    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                                        <Calendar className="w-10 h-10 text-gray-500" />
+                            {nextEvent ? (
+                                <EventCard event={nextEvent} />
+                            ) : (
+                                <div className="bg-[#1A1433] border border-white/10 rounded-3xl p-10 text-center relative overflow-hidden">
+                                    <div className="relative z-10">
+                                        <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                            <Calendar className="w-10 h-10 text-gray-500" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-white mb-3">No Sessions Currently Open</h3>
+                                        <p className="text-gray-400 max-w-sm mx-auto mb-8">
+                                            No public sessions are open for booking right now. Join our waitlist to be notified first.
+                                        </p>
                                     </div>
-                                    <h3 className="text-xl font-bold text-white mb-3">No Sessions Currently Open</h3>
-                                    <p className="text-gray-400 max-w-sm mx-auto mb-8">
-                                        No public sessions are open for booking right now. Join our waitlist to be notified first.
-                                    </p>
                                 </div>
-                            </div>
+                            )}
 
                             <div className="mt-12 p-8 bg-gradient-to-br from-[#d946ef]/20 to-transparent rounded-3xl border border-[#d946ef]/30">
                                 <h4 className="text-xl font-bold text-white mb-2">Want a private workshop?</h4>
@@ -122,21 +182,29 @@ export default function TrainingPage() {
                             </div>
                         </div>
 
-                        {/* Right Column: Waitlist Form */}
+                        {/* Right Column: Register form */}
                         <div>
                             <div className="mb-8">
                                 <h2 className="text-3xl font-bold text-white mb-2">
-                                    Join the <span className="text-accent">Waitlist</span>
+                                    {nextEvent
+                                        ? 'Register Now'
+                                        : <>Join the <span className="text-accent">Waitlist</span></>
+                                    }
                                 </h2>
-                                <p className="text-gray-400">Be the first to know when new training dates are released.</p>
+                                <p className="text-gray-400">
+                                    {nextEvent
+                                        ? 'Secure your spot for this upcoming session.'
+                                        : 'Be the first to know when new training dates are released.'
+                                    }
+                                </p>
                             </div>
 
                             <WebinarForm />
                         </div>
+
                     </div>
                 </div>
             </section>
         </div>
     )
 }
-

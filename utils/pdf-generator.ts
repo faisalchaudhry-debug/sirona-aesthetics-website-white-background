@@ -18,19 +18,34 @@ interface Order {
     status: string;
     user_id: string;
     order_items: OrderItem[];
-    // Add other fields effectively used
+    // Guest order fields
+    guest_name?: string;
+    guest_email?: string;
+    guest_phone?: string;
+    // Shipping address
+    shipping_line1?: string;
+    shipping_line2?: string;
+    shipping_city?: string;
+    shipping_postcode?: string;
+    shipping_country?: string;
+    // Billing address
+    billing_line1?: string;
+    billing_line2?: string;
+    billing_city?: string;
+    billing_postcode?: string;
+    billing_country?: string;
 }
 
 interface Profile {
     full_name: string;
     email: string;
-    // Add address fields if they exist in your profile or order object
-    // Assuming address might be in a separate table or jsonB field, 
-    // for now we'll use placeholders or derived data if not available in the checked types
+    phone?: string;
+    company_name?: string;
     address_line1?: string;
     address_line2?: string;
     city?: string;
-    postcode?: string;
+    state?: string;
+    postal_code?: string;
     country?: string;
 }
 
@@ -123,17 +138,23 @@ export const generateInvoicePDFAsync = async (order: Order, profile: Profile) =>
     doc.setFontSize(8);
 
     // Left: Customer Address
-    const customerName = profile.full_name || "Guest Customer";
+    const customerName = profile.full_name || order.guest_name || "Guest Customer";
+
+    // Build shipping address lines from order fields, fall back to profile fields
+    const shipLine1 = order.shipping_line1 || profile.address_line1 || '';
+    const shipLine2 = order.shipping_line2 || profile.address_line2 || '';
+    const shipCity  = order.shipping_city  || profile.city     || '';
+    const shipPost  = order.shipping_postcode || profile.postal_code || '';
+    const shipCountry = order.shipping_country || profile.country || '';
+
     const deliverLines = [
         customerName,
-        "Attention: Wood MediSpa",
-        "Wood House",
-        "South Tawton",
-        "Okehampton",
-        "Devon",
-        "EX20 2LS",
-        "UNITED KINGDOM"
-    ];
+        shipLine1,
+        shipLine2,
+        shipCity,
+        shipPost,
+        shipCountry ? shipCountry.toUpperCase() : '',
+    ].filter(Boolean);
     let currentY = layoutY;
     deliverLines.forEach(line => {
         doc.text(line, 15, currentY);
@@ -490,17 +511,22 @@ export const generatePackingSlipPDFAsync = async (order: Order, profile: Profile
     doc.text("Deliver to", col1X, layoutY);
 
     doc.setFont("helvetica", "normal");
-    const customerName = profile.full_name || "Guest Customer";
+    const customerName = profile.full_name || order.guest_name || "Guest Customer";
+
+    const shipLine1 = order.shipping_line1 || profile.address_line1 || '';
+    const shipLine2 = order.shipping_line2 || profile.address_line2 || '';
+    const shipCity  = order.shipping_city  || profile.city     || '';
+    const shipPost  = order.shipping_postcode || profile.postal_code || '';
+    const shipCountry = order.shipping_country || profile.country || '';
+
     const deliverLines = [
         customerName,
-        "Attention: Wood MediSpa",
-        "Wood House",
-        "South Tawton",
-        "Okehampton",
-        "Devon",
-        "EX20 2LS",
-        "UNITED KINGDOM"
-    ];
+        shipLine1,
+        shipLine2,
+        shipCity,
+        shipPost,
+        shipCountry ? shipCountry.toUpperCase() : '',
+    ].filter(Boolean);
 
     let currentY = layoutY + 4;
     deliverLines.forEach(line => {
@@ -533,17 +559,22 @@ export const generatePackingSlipPDFAsync = async (order: Order, profile: Profile
     doc.text("Bill to", col3X, col3Y);
 
     doc.setFont("helvetica", "normal");
+
+    // Use billing address if different from shipping, otherwise reuse shipping
+    const billLine1 = order.billing_line1 || shipLine1;
+    const billLine2 = order.billing_line2 || shipLine2;
+    const billCity  = order.billing_city  || shipCity;
+    const billPost  = order.billing_postcode || shipPost;
+    const billCountry = order.billing_country || shipCountry;
+
     const billLines = [
         customerName,
-        "Attention: Wood",
-        "MediSpa",
-        "Wood House",
-        "South Tawton",
-        "Okehampton",
-        "Devon",
-        "EX20 2LS",
-        "UNITED KINGDOM"
-    ];
+        billLine1,
+        billLine2,
+        billCity,
+        billPost,
+        billCountry ? billCountry.toUpperCase() : '',
+    ].filter(Boolean);
 
     col3Y += 4;
     billLines.forEach(line => {

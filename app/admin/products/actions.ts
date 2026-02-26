@@ -193,7 +193,8 @@ export async function createProduct(formData: FormData) {
         sale_price: formData.get('sale_price') ? parseFloat(formData.get('sale_price') as string) : null,
         stock: parseInt(formData.get('stock') as string),
         category: formData.get('category') as string,
-        is_active: formData.get('is_active') === 'true'
+        is_active: formData.get('is_active') === 'true',
+        is_injectable: formData.get('is_injectable') === 'on'
     }
 
     const { data: product, error } = await supabase
@@ -225,7 +226,8 @@ export async function updateProduct(formData: FormData) {
         stock: parseInt(formData.get('stock') as string),
         category: formData.get('category') as string,
         updated_at: new Date().toISOString(),
-        is_active: formData.get('is_active') === 'true'
+        is_active: formData.get('is_active') === 'true',
+        is_injectable: formData.get('is_injectable') === 'on'
     }
 
     const { error } = await supabase

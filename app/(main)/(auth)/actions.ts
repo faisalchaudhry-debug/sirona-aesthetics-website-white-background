@@ -29,8 +29,14 @@ export async function signup(formData: FormData) {
     const fullName = formData.get('fullName') as string
     const companyName = formData.get('companyName') as string
     const phone = formData.get('phone') as string
+    const designation = formData.get('designation') as string
+    const address_line1 = formData.get('address_line1') as string
+    const address_line2 = (formData.get('address_line2') as string) || ''
+    const city = formData.get('city') as string
+    const postal_code = formData.get('postal_code') as string
+    const country = formData.get('country') as string
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -38,7 +44,13 @@ export async function signup(formData: FormData) {
                 full_name: fullName,
                 company_name: companyName,
                 phone: phone,
-                // Role will be set to 'user' by default via trigger, 
+                designation,
+                address_line1,
+                address_line2,
+                city,
+                postal_code,
+                country,
+                // Role will be set to 'user' by default via trigger,
                 // Admin needs to approve and upgrade to 'doctor' manually or via admin dashboard
             },
         },
@@ -46,6 +58,14 @@ export async function signup(formData: FormData) {
 
     if (error) {
         return redirect('/register?message=Could not create user')
+    }
+
+    // Store address fields directly in the profile row (in case trigger doesn't map them)
+    if (data.user) {
+        await supabase
+            .from('profiles')
+            .update({ designation, address_line1, address_line2, city, postal_code, country })
+            .eq('id', data.user.id)
     }
 
     // Send data to GHL Webhook
@@ -59,7 +79,13 @@ export async function signup(formData: FormData) {
                 fullName,
                 companyName,
                 phone,
+                designation,
                 email,
+                address_line1,
+                address_line2,
+                city,
+                postal_code,
+                country,
             }),
         })
     } catch (err) {

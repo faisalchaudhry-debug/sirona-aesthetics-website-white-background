@@ -1,8 +1,9 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { registerWebinar, WebinarFormState } from '@/app/actions/webinar'
-import { User, Mail, Building, MessageSquare, ChevronRight, Loader2, CheckCircle2 } from 'lucide-react'
+import { User, Mail, Phone, Building, MessageSquare, ChevronRight, Loader2 } from 'lucide-react'
 
 const initialState: WebinarFormState = {
     message: '',
@@ -12,20 +13,13 @@ const initialState: WebinarFormState = {
 
 export default function WebinarForm() {
     const [state, formAction, isPending] = useActionState(registerWebinar, initialState)
+    const router = useRouter()
 
-    if (state?.success) {
-        return (
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-12 backdrop-blur-sm text-center animate-in fade-in zoom-in duration-300">
-                <div className="w-16 h-16 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">You're on the list!</h3>
-                <p className="text-gray-300">
-                    {state.message}
-                </p>
-            </div>
-        )
-    }
+    useEffect(() => {
+        if (state?.success) {
+            router.push('/training/thank-you')
+        }
+    }, [state?.success, router])
 
     return (
         <form action={formAction} className="bg-[#1A1433] border border-white/10 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden">
@@ -63,6 +57,22 @@ export default function WebinarForm() {
                             required
                             className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                             placeholder="name@example.com"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label htmlFor="phone" className="block text-sm font-bold text-gray-300 mb-2">Phone Number</label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Phone className="h-5 w-5 text-gray-500" />
+                        </div>
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
+                            placeholder="+44 7700 900000"
                         />
                     </div>
                 </div>

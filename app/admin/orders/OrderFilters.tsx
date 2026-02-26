@@ -36,6 +36,7 @@ export default function OrderFilters({ orderCount }: OrderFiltersProps) {
                         <option value="">All</option>
                         <option value="paid">Paid</option>
                         <option value="unpaid">Unpaid</option>
+                        <option value="injectable_review">Injectable Review</option>
                         <option value="cancelled">Cancelled</option>
                     </select>
                 </div>

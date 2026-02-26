@@ -71,6 +71,20 @@ export default async function RegisterPage({
                         </div>
 
                         <div className="space-y-2">
+                            <label htmlFor="designation" className="block text-sm font-medium text-gray-700">
+                                Designation
+                            </label>
+                            <input
+                                id="designation"
+                                name="designation"
+                                type="text"
+                                required
+                                className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                placeholder="e.g. GP, Aesthetic Doctor, Nurse Practitioner"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
                             <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
                                 Email address
                             </label>
@@ -98,6 +112,86 @@ export default async function RegisterPage({
                                 className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
                                 placeholder="Create a strong password"
                             />
+                        </div>
+
+                        {/* Address Section */}
+                        <div className="pt-2">
+                            <div className="flex items-center gap-3 mb-4">
+                                <span className="text-xs font-semibold text-gray-400 uppercase tracking-widest whitespace-nowrap">Clinic / Delivery Address</span>
+                                <div className="flex-1 h-px bg-gray-100" />
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label htmlFor="address_line1" className="block text-sm font-medium text-gray-700">
+                                        Address Line 1
+                                    </label>
+                                    <input
+                                        id="address_line1"
+                                        name="address_line1"
+                                        type="text"
+                                        required
+                                        className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                        placeholder="123 Clinic Street"
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label htmlFor="address_line2" className="block text-sm font-medium text-gray-700">
+                                        Address Line 2 <span className="text-gray-400 font-normal">(optional)</span>
+                                    </label>
+                                    <input
+                                        id="address_line2"
+                                        name="address_line2"
+                                        type="text"
+                                        className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                        placeholder="Suite, unit, floor…"
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700">
+                                            City
+                                        </label>
+                                        <input
+                                            id="city"
+                                            name="city"
+                                            type="text"
+                                            required
+                                            className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                            placeholder="London"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label htmlFor="postal_code" className="block text-sm font-medium text-gray-700">
+                                            Postal Code
+                                        </label>
+                                        <input
+                                            id="postal_code"
+                                            name="postal_code"
+                                            type="text"
+                                            required
+                                            className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                            placeholder="SW1A 1AA"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label htmlFor="country" className="block text-sm font-medium text-gray-700">
+                                        Country
+                                    </label>
+                                    <input
+                                        id="country"
+                                        name="country"
+                                        type="text"
+                                        required
+                                        className="appearance-none block w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sirona-navy/20 focus:border-sirona-navy transition-all text-sm"
+                                        placeholder="United Kingdom"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
 

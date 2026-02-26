@@ -39,7 +39,7 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
         const userIds = orders.map(o => o.user_id).filter(Boolean)
         const { data: profiles } = await supabase
             .from('profiles')
-            .select('id, full_name, email')
+            .select('id, full_name, email, phone, company_name, address_line1, address_line2, city, state, postal_code, country')
             .in('id', userIds.length > 0 ? userIds : ['00000000-0000-0000-0000-000000000000'])
 
         ordersWithProfiles = orders.map(order => ({
@@ -56,6 +56,8 @@ export default async function AdminOrdersPage({ searchParams }: PageProps) {
         filteredOrders = filteredOrders.filter(o => ['paid', 'shipped', 'delivered'].includes(o.status))
     } else if (paymentFilter === 'unpaid') {
         filteredOrders = filteredOrders.filter(o => o.status === 'pending')
+    } else if (paymentFilter === 'injectable_review') {
+        filteredOrders = filteredOrders.filter(o => o.status === 'injectable_review')
     } else if (paymentFilter === 'cancelled') {
         filteredOrders = filteredOrders.filter(o => o.status === 'cancelled')
     }

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Lock, Clock } from 'lucide-react'
+import { ArrowRight, Lock, Clock, Syringe } from 'lucide-react'
 
 interface Product {
     id: string
@@ -9,6 +9,7 @@ interface Product {
     image_url: string
     category: string
     slug?: string
+    is_injectable?: boolean
 }
 
 interface ProductCardProps {
@@ -36,6 +37,12 @@ export default function ProductCard({ product, showPrice, isPending }: ProductCa
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md border border-gray-200 px-3 py-1 rounded-full text-xs font-bold text-sirona-navy uppercase tracking-wider shadow-sm">
                     {product.category}
                 </div>
+                {product.is_injectable && (
+                    <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-xs font-bold text-white flex items-center gap-1 shadow-sm">
+                        <Syringe className="w-3 h-3" />
+                        <span>Training Required</span>
+                    </div>
+                )}
             </div>
 
             <div className="p-8 flex flex-col flex-grow relative">

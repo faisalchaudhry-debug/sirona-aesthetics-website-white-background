@@ -15,6 +15,7 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
 
     // Derive payment and fulfillment status from order status
     const isCancelled = order.status === 'cancelled'
+    const isInjectableReview = order.status === 'injectable_review'
     const isPaid = ['paid', 'shipped', 'delivered'].includes(order.status)
     const isFulfilled = ['shipped', 'delivered'].includes(order.status)
 
@@ -23,6 +24,7 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
     // Get payment badge style and text
     const getPaymentBadge = () => {
         if (isCancelled) return { text: 'Cancelled', classes: 'bg-gray-200 text-gray-600' }
+        if (isInjectableReview) return { text: 'Pending Review', classes: 'bg-amber-100 text-amber-700' }
         if (isPaid) return { text: 'Paid', classes: 'bg-green-100 text-green-700' }
         return { text: 'Unpaid', classes: 'bg-red-100 text-red-700' }
     }
@@ -30,6 +32,7 @@ export default function OrderRow({ order, profile }: OrderRowProps) {
     // Get fulfillment badge style and text
     const getFulfillmentBadge = () => {
         if (isCancelled) return { text: 'Cancelled', classes: 'bg-gray-200 text-gray-600' }
+        if (isInjectableReview) return { text: 'Awaiting Vetting', classes: 'bg-amber-100 text-amber-700' }
         if (isFulfilled) return { text: 'Fulfilled', classes: 'bg-green-100 text-green-700' }
         return { text: 'Unfulfilled', classes: 'bg-orange-100 text-orange-600' }
     }

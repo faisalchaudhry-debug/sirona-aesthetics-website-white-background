@@ -17,8 +17,16 @@ function getAdminClient() {
     })
 }
 
+interface AddressFields {
+    line1: string
+    line2?: string
+    city: string
+    postcode: string
+    country: string
+}
+
 export async function POST(request: Request) {
-    const { items, guestName, guestEmail } = await request.json()
+    const { items, guestName, guestEmail, phone, shippingAddress, billingAddress } = await request.json()
 
     if (!items || items.length === 0) {
         return NextResponse.json({ error: 'No items in cart' }, { status: 400 })
@@ -26,6 +34,15 @@ export async function POST(request: Request) {
 
     if (!guestName?.trim() || !guestEmail?.trim()) {
         return NextResponse.json({ error: 'Name and email are required' }, { status: 400 })
+    }
+
+    if (!phone?.trim()) {
+        return NextResponse.json({ error: 'Phone number is required' }, { status: 400 })
+    }
+
+    const sa: AddressFields = shippingAddress || {}
+    if (!sa.line1?.trim() || !sa.city?.trim() || !sa.postcode?.trim() || !sa.country?.trim()) {
+        return NextResponse.json({ error: 'Complete shipping address is required' }, { status: 400 })
     }
 
     try {
@@ -42,12 +59,25 @@ export async function POST(request: Request) {
 
         // Create order — user_id is null for guest orders
         // Requires migration: ALTER TABLE orders ALTER COLUMN user_id DROP NOT NULL
+        const ba: AddressFields = billingAddress || sa
+
         const { data: order, error: orderError } = await supabase
             .from('orders')
             .insert({
                 user_id: null,
                 guest_name: guestName.trim(),
                 guest_email: guestEmail.trim().toLowerCase(),
+                guest_phone: phone.trim(),
+                shipping_line1: sa.line1.trim(),
+                shipping_line2: sa.line2?.trim() || null,
+                shipping_city: sa.city.trim(),
+                shipping_postcode: sa.postcode.trim(),
+                shipping_country: sa.country,
+                billing_line1: ba.line1.trim(),
+                billing_line2: ba.line2?.trim() || null,
+                billing_city: ba.city.trim(),
+                billing_postcode: ba.postcode.trim(),
+                billing_country: ba.country,
                 status: 'pending',
                 total_amount: totalAmount,
             })
@@ -126,10 +156,34 @@ export async function POST(request: Request) {
             success_url: `${baseUrl}/veluria/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${baseUrl}/veluria/checkout`,
             customer_email: guestEmail.trim().toLowerCase(),
+            payment_intent_data: {
+                shipping: {
+                    name: guestName.trim(),
+                    phone: phone.trim(),
+                    address: {
+                        line1: sa.line1.trim(),
+                        line2: sa.line2?.trim() || undefined,
+                        city: sa.city.trim(),
+                        postal_code: sa.postcode.trim(),
+                        country: sa.country,
+                    },
+                },
+            },
             metadata: {
                 orderId: order.id,
                 guestName: guestName.trim(),
                 guestEmail: guestEmail.trim().toLowerCase(),
+                phone: phone.trim(),
+                shippingLine1: sa.line1.trim(),
+                shippingLine2: sa.line2?.trim() || '',
+                shippingCity: sa.city.trim(),
+                shippingPostcode: sa.postcode.trim(),
+                shippingCountry: sa.country,
+                billingLine1: ba.line1.trim(),
+                billingLine2: ba.line2?.trim() || '',
+                billingCity: ba.city.trim(),
+                billingPostcode: ba.postcode.trim(),
+                billingCountry: ba.country,
                 source: 'veluria',
             },
         })

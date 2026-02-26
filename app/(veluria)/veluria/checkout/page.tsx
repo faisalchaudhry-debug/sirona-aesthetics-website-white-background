@@ -4,18 +4,152 @@ import { useCart } from '@/context/CartContext'
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, ShoppingBag, Loader2, Trash2 } from 'lucide-react'
+import { ArrowLeft, ShoppingBag, Loader2, Trash2, MapPin, User, CreditCard } from 'lucide-react'
+
+const inputClass =
+  'w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 transition-colors'
+
+const labelClass = 'block text-sm text-white/60 mb-2'
+
+interface AddressFields {
+  line1: string
+  line2: string
+  city: string
+  postcode: string
+  country: string
+}
+
+const EMPTY_ADDRESS: AddressFields = { line1: '', line2: '', city: '', postcode: '', country: 'GB' }
+
+const COUNTRIES = [
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'US', name: 'United States' },
+  { code: 'IE', name: 'Ireland' },
+  { code: 'FR', name: 'France' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'NL', name: 'Netherlands' },
+  { code: 'BE', name: 'Belgium' },
+  { code: 'AU', name: 'Australia' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'AE', name: 'United Arab Emirates' },
+]
+
+function AddressForm({
+  values,
+  onChange,
+  prefix,
+}: {
+  values: AddressFields
+  onChange: (field: keyof AddressFields, value: string) => void
+  prefix: string
+}) {
+  return (
+    <div className="space-y-4">
+      <div>
+        <label htmlFor={`${prefix}-line1`} className={labelClass}>
+          Address Line 1 *
+        </label>
+        <input
+          id={`${prefix}-line1`}
+          type="text"
+          required
+          value={values.line1}
+          onChange={(e) => onChange('line1', e.target.value)}
+          placeholder="123 High Street"
+          className={inputClass}
+        />
+      </div>
+
+      <div>
+        <label htmlFor={`${prefix}-line2`} className={labelClass}>
+          Address Line 2 <span className="text-white/30">(optional)</span>
+        </label>
+        <input
+          id={`${prefix}-line2`}
+          type="text"
+          value={values.line2}
+          onChange={(e) => onChange('line2', e.target.value)}
+          placeholder="Apartment, suite, unit…"
+          className={inputClass}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label htmlFor={`${prefix}-city`} className={labelClass}>
+            City *
+          </label>
+          <input
+            id={`${prefix}-city`}
+            type="text"
+            required
+            value={values.city}
+            onChange={(e) => onChange('city', e.target.value)}
+            placeholder="London"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label htmlFor={`${prefix}-postcode`} className={labelClass}>
+            Postcode *
+          </label>
+          <input
+            id={`${prefix}-postcode`}
+            type="text"
+            required
+            value={values.postcode}
+            onChange={(e) => onChange('postcode', e.target.value)}
+            placeholder="SW1A 1AA"
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor={`${prefix}-country`} className={labelClass}>
+          Country *
+        </label>
+        <select
+          id={`${prefix}-country`}
+          required
+          value={values.country}
+          onChange={(e) => onChange('country', e.target.value)}
+          className={`${inputClass} appearance-none cursor-pointer`}
+        >
+          {COUNTRIES.map((c) => (
+            <option key={c.code} value={c.code} className="bg-[#1A1535] text-white">
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  )
+}
 
 export default function VeluriaCheckoutPage() {
   const { items, cartTotal, removeItem, updateQuantity } = useCart()
+
   const [guestName, setGuestName] = useState('')
   const [guestEmail, setGuestEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [shipping, setShipping] = useState<AddressFields>({ ...EMPTY_ADDRESS })
+  const [billingSame, setBillingSame] = useState(true)
+  const [billing, setBilling] = useState<AddressFields>({ ...EMPTY_ADDRESS })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const vat = cartTotal * 0.20
-  const shipping = 7.50
-  const total = cartTotal + vat + shipping
+  const vat = cartTotal * 0.2
+  const shippingCost = 7.5
+  const total = cartTotal + vat + shippingCost
+
+  const handleShippingChange = (field: keyof AddressFields, value: string) =>
+    setShipping((prev) => ({ ...prev, [field]: value }))
+
+  const handleBillingChange = (field: keyof AddressFields, value: string) =>
+    setBilling((prev) => ({ ...prev, [field]: value }))
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +160,14 @@ export default function VeluriaCheckoutPage() {
       const res = await fetch('/api/veluria-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, guestName, guestEmail }),
+        body: JSON.stringify({
+          items,
+          guestName,
+          guestEmail,
+          phone,
+          shippingAddress: shipping,
+          billingAddress: billingSame ? shipping : billing,
+        }),
       })
 
       const data = await res.json()
@@ -80,67 +221,152 @@ export default function VeluriaCheckoutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
           {/* ── Left: Guest Details Form ── */}
-          <div>
-            <h2 className="text-xs font-bold text-white/50 uppercase tracking-[0.2em] mb-6">
-              Your Details
-            </h2>
+          <form onSubmit={handleCheckout} className="space-y-8">
 
-            <form onSubmit={handleCheckout} className="space-y-5">
-              <div>
-                <label className="block text-sm text-white/60 mb-2">Full Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={guestName}
-                  onChange={(e) => setGuestName(e.target.value)}
-                  placeholder="Dr. Jane Smith"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 transition-colors"
-                />
+            {/* ── Section 1: Contact Details ── */}
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #C9A84C, #F5D98B)' }}>
+                  <User className="w-3.5 h-3.5 text-[#0E0B1F]" />
+                </div>
+                <h2 className="text-xs font-bold text-white/70 uppercase tracking-[0.2em]">
+                  Contact Details
+                </h2>
               </div>
 
-              <div>
-                <label className="block text-sm text-white/60 mb-2">Email Address *</label>
-                <input
-                  type="email"
-                  required
-                  value={guestEmail}
-                  onChange={(e) => setGuestEmail(e.target.value)}
-                  placeholder="jane@clinic.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder-white/20 focus:outline-none focus:border-[#C9A84C]/50 transition-colors"
-                />
-                <p className="text-white/30 text-xs mt-2">
-                  Your order confirmation will be sent here by Stripe.
-                </p>
+              <div className="space-y-4">
+                <div>
+                  <label className={labelClass}>Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                    placeholder="Dr. Jane Smith"
+                    className={inputClass}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass}>Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    placeholder="jane@clinic.com"
+                    className={inputClass}
+                  />
+                  <p className="text-white/30 text-xs mt-2">
+                    Your order confirmation will be sent here by Stripe.
+                  </p>
+                </div>
+
+                <div>
+                  <label className={labelClass}>Phone Number *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+44 7700 900000"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* ── Section 2: Shipping Address ── */}
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #C9A84C, #F5D98B)' }}>
+                  <MapPin className="w-3.5 h-3.5 text-[#0E0B1F]" />
+                </div>
+                <h2 className="text-xs font-bold text-white/70 uppercase tracking-[0.2em]">
+                  Shipping Address
+                </h2>
               </div>
 
-              {error && (
-                <div className="bg-red-500/10 border border-red-500/30 rounded-2xl px-5 py-3.5 text-red-400 text-sm">
-                  {error}
+              <AddressForm values={shipping} onChange={handleShippingChange} prefix="shipping" />
+            </div>
+
+            {/* ── Section 3: Billing Address ── */}
+            <div>
+              <div className="flex items-center gap-2 mb-5">
+                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #C9A84C, #F5D98B)' }}>
+                  <CreditCard className="w-3.5 h-3.5 text-[#0E0B1F]" />
+                </div>
+                <h2 className="text-xs font-bold text-white/70 uppercase tracking-[0.2em]">
+                  Billing Address
+                </h2>
+              </div>
+
+              {/* Toggle */}
+              <label className="flex items-center gap-3 cursor-pointer mb-5 group w-fit">
+                <div className="relative">
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={billingSame}
+                    onChange={(e) => setBillingSame(e.target.checked)}
+                  />
+                  <div
+                    className={`w-11 h-6 rounded-full transition-all duration-300 ${
+                      billingSame ? '' : 'bg-white/10'
+                    }`}
+                    style={billingSame ? { background: 'linear-gradient(135deg, #C9A84C, #F5D98B)' } : {}}
+                  />
+                  <div
+                    className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all duration-300 ${
+                      billingSame ? 'left-6' : 'left-1'
+                    }`}
+                  />
+                </div>
+                <span className="text-sm text-white/70 group-hover:text-white transition-colors select-none">
+                  Billing address same as shipping
+                </span>
+              </label>
+
+              {/* Billing fields — shown only when unchecked */}
+              {!billingSame && (
+                <div className="border border-white/10 rounded-2xl p-5 bg-white/[0.02]">
+                  <AddressForm values={billing} onChange={handleBillingChange} prefix="billing" />
                 </div>
               )}
+            </div>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 rounded-full font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
-                style={{ background: 'linear-gradient(135deg, #C9A84C, #F5D98B)', color: '#0E0B1F' }}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Processing…
-                  </>
-                ) : (
-                  `Pay £${total.toFixed(2)}`
-                )}
-              </button>
+            {/* ── Error ── */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-2xl px-5 py-3.5 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
 
-              <p className="text-white/25 text-xs text-center leading-relaxed">
-                Secure payment via Stripe. You will be redirected to complete payment.
-                VAT (20%) and postage (£7.50) are included in the total above.
-              </p>
-            </form>
-          </div>
+            {/* ── Submit ── */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 rounded-full font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: 'linear-gradient(135deg, #C9A84C, #F5D98B)', color: '#0E0B1F' }}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Processing…
+                </>
+              ) : (
+                `Pay £${total.toFixed(2)}`
+              )}
+            </button>
+
+            <p className="text-white/25 text-xs text-center leading-relaxed">
+              Secure payment via Stripe. You will be redirected to complete payment.
+              VAT (20%) and postage (£7.50) are included in the total above.
+            </p>
+          </form>
 
           {/* ── Right: Order Summary ── */}
           <div>
@@ -217,17 +443,17 @@ export default function VeluriaCheckoutPage() {
                 <span>£{vat.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm text-white/50">
-                <span>Postage & Packing</span>
-                <span>£{shipping.toFixed(2)}</span>
+                <span>Postage &amp; Packing</span>
+                <span>£{shippingCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-bold text-white text-lg pt-3 border-t border-white/10">
                 <span>Total</span>
                 <span
                   style={{
-                    backgroundImage: "linear-gradient(135deg, #C9A84C, #F5D98B)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
+                    backgroundImage: 'linear-gradient(135deg, #C9A84C, #F5D98B)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
                   }}
                 >
                   £{total.toFixed(2)}

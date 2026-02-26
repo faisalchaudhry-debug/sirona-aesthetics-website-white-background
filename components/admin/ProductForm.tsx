@@ -24,6 +24,7 @@ type Product = {
     stock: number
     category: string
     is_active: boolean
+    is_injectable?: boolean
     product_media?: ProductMedia[]
 }
 
@@ -179,6 +180,25 @@ export default function ProductForm({ product, categories = [] }: { product?: Pr
                                 </select>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Injectable Setting */}
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Product Settings</h3>
+                        <label className="flex items-start space-x-3 cursor-pointer group">
+                            <input
+                                type="checkbox"
+                                name="is_injectable"
+                                defaultChecked={product?.is_injectable || false}
+                                className="mt-0.5 h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                            />
+                            <div>
+                                <span className="text-sm font-medium text-gray-900 group-hover:text-red-700 transition-colors">Injectable Product</span>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                    Customers without verified injectable training will be diverted to manual review instead of proceeding to payment. Jackie will be notified immediately.
+                                </p>
+                            </div>
+                        </label>
                     </div>
 
                     {/* Descriptions */}

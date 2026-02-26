@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useCart } from '@/context/CartContext'
 import { updateAddress } from '@/app/actions/address'
 import { Loader2 } from 'lucide-react'
@@ -21,7 +22,8 @@ interface Profile {
 }
 
 export default function CheckoutForm({ userProfile }: { userProfile: Profile }) {
-    const { items, cartTotal } = useCart()
+    const { items, cartTotal, clearCart } = useCart()
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -36,7 +38,7 @@ export default function CheckoutForm({ userProfile }: { userProfile: Profile }) 
                 throw new Error(result.error)
             }
 
-            // 2. Create Stripe Session
+            // 2. Call checkout API
             const response = await fetch('/api/checkout', {
                 method: 'POST',
                 headers: {
@@ -51,6 +53,14 @@ export default function CheckoutForm({ userProfile }: { userProfile: Profile }) 
                 throw new Error(data.error || 'Checkout failed')
             }
 
+            // 3a. Injectable review — order saved, redirect to confirmation page
+            if (data.requiresReview) {
+                clearCart()
+                router.push(`/order-review-pending?orderId=${data.orderId}`)
+                return
+            }
+
+            // 3b. Normal checkout — redirect to Stripe
             if (data.url) {
                 window.location.href = data.url
             } else {

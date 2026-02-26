@@ -147,7 +147,9 @@ export async function updateUser(formData: FormData) {
     const phone = formData.get('phone') as string
     const role = formData.get('role') as string
     const isApproved = formData.get('isApproved') === 'on'
+    const canBuyInjectables = formData.get('canBuyInjectables') === 'on'
 
+    const designation = formData.get('designation') as string
     const address_line1 = formData.get('address_line1') as string
     const address_line2 = formData.get('address_line2') as string
     const city = formData.get('city') as string
@@ -179,8 +181,10 @@ export async function updateUser(formData: FormData) {
             full_name: fullName,
             company_name: companyName,
             phone: phone,
+            designation,
             role: role,
             is_approved: isApproved,
+            can_buy_injectables: canBuyInjectables,
             address_line1,
             address_line2,
             city,

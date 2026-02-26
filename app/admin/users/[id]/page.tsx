@@ -84,6 +84,17 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                             </div>
                         </div>
 
+                        <div>
+                            <label htmlFor="designation" className="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                            <input
+                                type="text"
+                                name="designation"
+                                id="designation"
+                                defaultValue={userProfile.designation || ''}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-gray-900 bg-white"
+                            />
+                        </div>
+
                         <div className="border-t border-gray-100 pt-6">
                             <h3 className="text-sm font-medium text-gray-900 mb-4">Shipping Address</h3>
                             <div className="grid grid-cols-1 gap-4">
@@ -169,7 +180,7 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                 </select>
                             </div>
 
-                            <div className="flex items-center pt-6">
+                            <div className="flex flex-col gap-3 pt-1">
                                 <label className="flex items-center space-x-3 cursor-pointer">
                                     <input
                                         type="checkbox"
@@ -180,6 +191,20 @@ export default async function EditUserPage({ params }: { params: Promise<{ id: s
                                     <span className="text-sm font-medium text-gray-900">
                                         Approved for Access
                                     </span>
+                                </label>
+                                <label className="flex items-center space-x-3 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        name="canBuyInjectables"
+                                        defaultChecked={userProfile.can_buy_injectables || false}
+                                        className="h-5 w-5 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                                    />
+                                    <div>
+                                        <span className="text-sm font-medium text-gray-900">
+                                            Injectable Training Verified
+                                        </span>
+                                        <p className="text-xs text-gray-400 mt-0.5">Allows direct checkout for injectable products</p>
+                                    </div>
                                 </label>
                             </div>
                         </div>
