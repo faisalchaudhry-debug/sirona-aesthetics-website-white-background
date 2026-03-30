@@ -41,7 +41,7 @@ export default function CartPage() {
 
                                 <div className="flex-grow text-center sm:text-left">
                                     <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-                                    <p className="text-primary font-bold">£{item.price.toFixed(2)}</p>
+                                    <p className="text-primary font-bold">£{Number(item.price || 0).toFixed(2)}</p>
                                 </div>
 
                                 <div className="flex items-center space-x-4">
@@ -81,7 +81,7 @@ export default function CartPage() {
                             <div className="space-y-4 mb-6">
                                 <div className="flex justify-between text-gray-600">
                                     <span>Subtotal</span>
-                                    <span>£{cartTotal.toFixed(2)}</span>
+                                    <span>£{Number(cartTotal || 0).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-gray-600">
                                     <span>Shipping</span>
@@ -89,7 +89,7 @@ export default function CartPage() {
                                 </div>
                                 <div className="border-t border-gray-100 pt-4 flex justify-between font-bold text-lg text-gray-900">
                                     <span>Total</span>
-                                    <span>£{cartTotal.toFixed(2)}</span>
+                                    <span>£{Number(cartTotal || 0).toFixed(2)}</span>
                                 </div>
                             </div>
 

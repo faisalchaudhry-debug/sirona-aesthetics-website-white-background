@@ -41,7 +41,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const savedCart = localStorage.getItem('cart')
         if (savedCart) {
             try {
-                setItems(JSON.parse(savedCart))
+                const parsed = JSON.parse(savedCart)
+                // Sanitize: ensure price is always a valid number
+                const sanitized = Array.isArray(parsed)
+                    ? parsed.map((item: CartItem) => ({
+                          ...item,
+                          price: Number(item.price) || 0,
+                          quantity: Number(item.quantity) || 1,
+                      }))
+                    : []
+                setItems(sanitized)
             } catch (e) {
                 console.error('Failed to parse cart', e)
             }

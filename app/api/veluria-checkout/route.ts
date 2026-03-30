@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder')
+if (!process.env.STRIPE_SECRET_KEY) throw new Error('Missing STRIPE_SECRET_KEY environment variable')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 function getAdminClient() {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL

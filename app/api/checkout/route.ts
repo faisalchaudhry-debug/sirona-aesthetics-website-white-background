@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@/utils/supabase/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder')
+if (!process.env.STRIPE_SECRET_KEY) throw new Error('Missing STRIPE_SECRET_KEY environment variable')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 // Webhook URL for Jackie's GHL automation — receives injectable order review notifications
 const INJECTABLE_REVIEW_WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/OdylxFk47CSXq3mt6RoF/webhook-trigger/anPUVZEblloi9JfblJgI'
